@@ -184,7 +184,7 @@ function ProjectModalContent({ project }: { project: Project }) {
 
       {/* What I Built */}
       <div>
-        <h3 className="font-mono text-xs text-[#a855f7] uppercase tracking-wider mb-3 flex items-center gap-2">
+        <h3 className="font-mono text-xs text-[#fb7185] uppercase tracking-wider mb-3 flex items-center gap-2">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
@@ -193,7 +193,7 @@ function ProjectModalContent({ project }: { project: Project }) {
         <ul className="space-y-2">
           {project.builtComponents.map((component, i) => (
             <li key={i} className="text-sm text-[#a0a0b0] flex items-start gap-2">
-              <span className="w-1 h-1 rounded-full bg-[#a855f7] mt-2 shrink-0" />
+              <span className="w-1 h-1 rounded-full bg-[#fb7185] mt-2 shrink-0" />
               {component}
             </li>
           ))}
@@ -208,7 +208,7 @@ function ProjectModalContent({ project }: { project: Project }) {
         <div className="grid grid-cols-2 gap-4">
           {project.stack.frontend.length > 0 && (
             <div>
-              <p className="text-xs text-[#a855f7] font-mono mb-2">Frontend</p>
+              <p className="text-xs text-[#fb7185] font-mono mb-2">Frontend</p>
               <div className="flex flex-wrap gap-1.5">
                 {project.stack.frontend.map((t) => (
                   <TechBadge key={t} name={t} />
@@ -290,7 +290,7 @@ function Navigation() {
       }`}
     >
       <div className="w-full max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
-        <a href="#" className="font-mono text-sm text-[#a855f7]">
+        <a href="#" className="font-mono text-sm text-[#fb7185]">
           ana.neto
         </a>
         <div className="flex items-center gap-8">
@@ -308,7 +308,7 @@ function Navigation() {
           </a>
           <a
             href="#contact"
-            className="text-sm px-4 py-2 bg-[#a855f7]/10 text-[#a855f7] border border-[#a855f7]/20 hover:bg-[#a855f7]/20 transition-all"
+            className="text-sm px-4 py-2 bg-[#fb7185]/10 text-[#fb7185] border border-[#fb7185]/20 hover:bg-[#fb7185]/20 transition-all"
           >
             Contact
           </a>
@@ -323,12 +323,12 @@ function Hero() {
   return (
     <section className="min-h-screen flex items-center relative overflow-hidden">
       {/* Background gradient orbs */}
-      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-[#a855f7]/10 rounded-full blur-[120px]" />
-      <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-[#ec4899]/10 rounded-full blur-[120px]" />
+      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-[#fb7185]/10 rounded-full blur-[120px]" />
+      <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-[#a855f7]/10 rounded-full blur-[120px]" />
 
       <div className="w-full max-w-6xl mx-auto px-6 py-32 relative z-10">
         <div className="animate-fade-in opacity-0">
-          <p className="font-mono text-sm text-[#a855f7] mb-6 tracking-wide">
+          <p className="font-mono text-sm text-[#fb7185] mb-6 tracking-wide">
             FULL-STACK JAVASCRIPT DEVELOPER
           </p>
         </div>
@@ -347,7 +347,7 @@ function Hero() {
         <div className="flex flex-wrap gap-4 animate-fade-in opacity-0 animate-delay-3">
           <a
             href="#work"
-            className="group inline-flex items-center gap-3 px-6 py-4 bg-white text-[#0a0a0f] font-semibold hover:bg-[#a855f7] transition-all duration-300"
+            className="group inline-flex items-center gap-3 px-6 py-4 bg-white text-[#0a0a0f] font-semibold hover:bg-[#fb7185] transition-all duration-300"
           >
             View my work
             <svg
@@ -414,7 +414,7 @@ function ProjectCard({
             href={project.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 text-[#606070] hover:text-[#a855f7] transition-colors"
+            className="p-2 text-[#606070] hover:text-[#fb7185] transition-colors"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -441,7 +441,7 @@ function ProjectCard({
 
       <button
         onClick={() => onOpenModal(project)}
-        className="inline-flex items-center gap-2 text-sm text-[#a855f7] hover:text-[#c084fc] transition-colors font-medium"
+        className="inline-flex items-center gap-2 text-sm text-[#fb7185] hover:text-[#fda4af] transition-colors font-medium"
       >
         View details
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -547,7 +547,7 @@ function Projects() {
       <div className="w-full max-w-6xl mx-auto px-6">
         <div className="flex items-end justify-between mb-16">
           <div>
-            <p className="font-mono text-sm text-[#a855f7] mb-4">SELECTED WORK</p>
+            <p className="font-mono text-sm text-[#fb7185] mb-4">SELECTED WORK</p>
             <h2 className="text-4xl md:text-5xl font-bold">
               Things I&apos;ve built
             </h2>
@@ -616,7 +616,7 @@ function About() {
         <div className="grid lg:grid-cols-2 gap-20">
           {/* Left column - About text */}
           <div>
-            <p className="font-mono text-sm text-[#a855f7] mb-4">ABOUT</p>
+            <p className="font-mono text-sm text-[#fb7185] mb-4">ABOUT</p>
             <h2 className="text-4xl font-bold mb-8">
               Developer with a
               <br />
@@ -660,15 +660,15 @@ function About() {
 
           {/* Right column - Experience timeline */}
           <div>
-            <p className="font-mono text-sm text-[#a855f7] mb-4">EXPERIENCE</p>
+            <p className="font-mono text-sm text-[#fb7185] mb-4">EXPERIENCE</p>
             <div className="space-y-0">
               {experience.map((job, i) => (
                 <div
                   key={i}
-                  className="group relative pl-8 pb-10 border-l border-white/10 hover:border-[#a855f7]/30 transition-colors"
+                  className="group relative pl-8 pb-10 border-l border-white/10 hover:border-[#fb7185]/30 transition-colors"
                 >
                   {/* Timeline dot */}
-                  <div className="absolute left-0 top-0 w-2 h-2 -translate-x-1/2 rounded-full bg-[#606070] group-hover:bg-[#a855f7] transition-colors" />
+                  <div className="absolute left-0 top-0 w-2 h-2 -translate-x-1/2 rounded-full bg-[#606070] group-hover:bg-[#fb7185] transition-colors" />
 
                   <p className="font-mono text-xs text-[#606070] mb-2">
                     {job.period}
@@ -676,7 +676,7 @@ function About() {
                   <h4 className="text-lg font-semibold text-white mb-1">
                     {job.role}
                   </h4>
-                  <p className="text-[#a855f7] text-sm mb-2">{job.company}</p>
+                  <p className="text-[#fb7185] text-sm mb-2">{job.company}</p>
                   <p className="text-sm text-[#a0a0b0]">{job.desc}</p>
                 </div>
               ))}
@@ -693,11 +693,11 @@ function Contact() {
   return (
     <section id="contact" className="py-32 relative overflow-hidden">
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#a855f7]/5 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#fb7185]/5 to-transparent" />
 
       <div className="w-full max-w-6xl mx-auto px-6 relative z-10">
         <div className="text-center">
-          <p className="font-mono text-sm text-[#a855f7] mb-4">GET IN TOUCH</p>
+          <p className="font-mono text-sm text-[#fb7185] mb-4">GET IN TOUCH</p>
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Let&apos;s work together
           </h2>
@@ -709,7 +709,7 @@ function Contact() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
             <a
               href="mailto:ana.neto.agn@gmail.com"
-              className="group inline-flex items-center gap-3 px-8 py-4 bg-[#a855f7] text-[#0a0a0f] font-semibold hover:bg-[#a855f7]/90 transition-all duration-300"
+              className="group inline-flex items-center gap-3 px-8 py-4 bg-[#fb7185] text-[#0a0a0f] font-semibold hover:bg-[#fb7185]/90 transition-all duration-300"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
