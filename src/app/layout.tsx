@@ -6,9 +6,10 @@ export const metadata: Metadata = {
   description:
     "8+ years building web and mobile apps. React, React Native, Next.js specialist. From AI-powered platforms to real-time systems.",
   openGraph: {
-    title: "Ana Neto | Full-Stack JavaScript Developer",
+    title: "Ana Neto — Full-Stack JavaScript Developer",
     description:
       "8+ years building web and mobile apps. I take projects from idea to deployment.",
+    siteName: "Ana Neto",
     type: "website",
   },
 };
