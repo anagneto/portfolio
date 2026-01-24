@@ -298,19 +298,19 @@ function Navigation() {
             href="#work"
             className="text-sm text-[#a0a0b0] hover:text-white transition-colors"
           >
-            Work
+            My Work
           </a>
           <a
             href="#about"
             className="text-sm text-[#a0a0b0] hover:text-white transition-colors"
           >
-            About
+            About Me
           </a>
           <a
             href="#contact"
             className="text-sm px-4 py-2 bg-[#fb7185]/10 text-[#fb7185] border border-[#fb7185]/20 hover:bg-[#fb7185]/20 transition-all"
           >
-            Contact
+            Get in Touch
           </a>
         </div>
       </div>
@@ -340,8 +340,8 @@ function Hero() {
         </h1>
 
         <p className="text-xl md:text-2xl text-[#a0a0b0] max-w-2xl mb-12 leading-relaxed animate-fade-in opacity-0 animate-delay-2">
-          8+ years crafting web and mobile experiences. From AI-powered platforms
-          to real-time systems serving thousands of users.
+          8+ years crafting web and mobile experiences.<br />
+          From AI platforms to real-time systems serving thousands.
         </p>
 
         <div className="flex flex-wrap gap-4 animate-fade-in opacity-0 animate-delay-3">
@@ -365,10 +365,10 @@ function Hero() {
             </svg>
           </a>
           <a
-            href="#contact"
+            href="#about"
             className="inline-flex items-center gap-3 px-6 py-4 text-white border border-white/20 font-semibold hover:bg-white/5 transition-all duration-300"
           >
-            Get in touch
+            About Me
           </a>
         </div>
 
@@ -414,7 +414,7 @@ function ProjectCard({
             href={project.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 text-[#606070] hover:text-[#fb7185] transition-colors"
+            className="p-2 text-[#606070] hover:text-[#fb7185] transition-colors cursor-pointer"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -441,7 +441,7 @@ function ProjectCard({
 
       <button
         onClick={() => onOpenModal(project)}
-        className="inline-flex items-center gap-2 text-sm text-[#fb7185] hover:text-[#fda4af] transition-colors font-medium"
+        className="inline-flex items-center gap-2 text-sm text-[#fb7185] hover:text-[#fda4af] transition-colors font-medium cursor-pointer"
       >
         View details
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -580,26 +580,26 @@ function About() {
     {
       period: "2025 — Now",
       role: "Co-Founder & CEO",
-      company: "OneShot",
-      desc: "Building AI-powered hiring tools",
+      company: "OneShot (AI Hiring Platform)",
+      desc: "Solo-built full-stack SaaS with AI, payments, and video infrastructure",
     },
     {
       period: "2019 — 2023",
       role: "Co-Founder",
-      company: "LeapLane",
-      desc: "Software consultancy, 5+ client projects",
+      company: "LeapLane (Software Consultancy)",
+      desc: "Led development on client projects from architecture to deployment",
     },
     {
       period: "2018 — 2019",
       role: "Full-Stack Developer",
-      company: "Mosano",
-      desc: "React & React Native for US clients",
+      company: "Mosano (Software Agency)",
+      desc: "Full-stack development (React, React Native, Express) for US clients",
     },
     {
       period: "2017 — 2018",
       role: "Full-Stack Developer",
-      company: "Jimmy Boys",
-      desc: "Athlete management platform",
+      company: "Jimmy Boys (Software Agency)",
+      desc: "End-to-end product delivery: frontend, backend, database, deployment",
     },
   ];
 
@@ -703,7 +703,7 @@ function Contact() {
           </h2>
           <p className="text-xl text-[#a0a0b0] mb-12">
             Looking for a developer who can own your project end-to-end? I&apos;m
-            available for freelance work and consulting.
+            available for freelance work, consulting, and contracting.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
@@ -735,7 +735,7 @@ function Contact() {
           </div>
 
           <p className="text-sm text-[#606070]">
-            Porto, Portugal · Remote-friendly · EU timezone
+            Porto, Portugal · Remote only · EU timezone
           </p>
         </div>
       </div>
