@@ -722,7 +722,7 @@ function Contact() {
               Get in touch
             </a>
             <a
-              href="https://linkedin.com/in/ananeto"
+              href="https://www.linkedin.com/in/anagneto/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 px-8 py-4 border border-white/20 text-white font-semibold hover:bg-white/5 transition-all duration-300"
