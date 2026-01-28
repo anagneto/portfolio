@@ -179,6 +179,31 @@ function ProjectModalContent({ project }: { project: Project }) {
         </DialogDescription>
       </DialogHeader>
 
+      {/* Link highlight */}
+      {project.link && (
+        <Link
+          href={project.link}
+          target={project.link.startsWith('/') ? undefined : "_blank"}
+          rel={project.link.startsWith('/') ? undefined : "noopener noreferrer"}
+          className="flex items-center justify-between gap-4 p-4 bg-[#fb7185]/10 border border-[#fb7185]/30 rounded-lg hover:bg-[#fb7185]/20 transition-colors group"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-[#fb7185]/20 flex items-center justify-center">
+              <svg className="w-5 h-5 text-[#fb7185]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-[#fb7185]">View Project</p>
+              <p className="text-xs text-[#a0a0b0]">{project.link.startsWith('/') ? 'See full case study' : project.link.replace('https://', '')}</p>
+            </div>
+          </div>
+          <svg className="w-5 h-5 text-[#fb7185] group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </Link>
+      )}
+
       {/* Description */}
       <p className="text-[#a0a0b0] leading-relaxed">{project.description}</p>
 
@@ -477,7 +502,7 @@ function Projects() {
         "Admin dashboard with real-time candidate analytics",
         "Multi-language support (PT/EN)",
       ],
-      link: "https://oneshot.pt",
+      link: "/oneshot",
     },
     {
       title: "beAPT",
@@ -518,7 +543,7 @@ function Projects() {
         "Receipt scanner integration",
         "Push notifications for tax deadlines",
       ],
-      link: "https://cloudware.pt",
+      link: "https://www.youtube.com/watch?v=QrryV2obX_E",
     },
     {
       title: "Real-Time Quiz Game",
@@ -539,6 +564,7 @@ function Projects() {
         "Stage leaderboard display",
         "Score calculation engine with fair timing",
       ],
+      link: "/qqsc",
     },
   ];
 
@@ -566,7 +592,7 @@ function Projects() {
       </div>
 
       <Dialog open={!!selectedProject} onOpenChange={(open) => !open && setSelectedProject(null)}>
-        <DialogContent className="bg-[#12121a] border-white/10 max-w-3xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="bg-[#12121a] border-white/10 max-w-6xl w-[90vw] max-h-[85vh] overflow-y-auto">
           {selectedProject && <ProjectModalContent project={selectedProject} />}
         </DialogContent>
       </Dialog>
