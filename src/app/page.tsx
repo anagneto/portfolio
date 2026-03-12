@@ -505,6 +505,28 @@ function Projects() {
       link: "/oneshot",
     },
     {
+      title: "Unspiral",
+      subtitle: "AI Emotional Coach Mobile App",
+      description:
+        "Chat-based emotional coaching app that helps people decode anxiety, overwhelm, and avoidance. AI coach classifies emotional signals and provides structured interventions grounded in psychology.",
+      tech: ["React Native", "Expo", "Supabase", "Claude AI", "TypeScript"],
+      stack: {
+        frontend: ["React Native", "Expo", "TypeScript"],
+        backend: ["Supabase Edge Functions", "Claude AI"],
+        database: ["Supabase", "PostgreSQL"],
+        infra: ["EAS Build", "Google Play", "Sentry"],
+      },
+      builtComponents: [
+        "Streaming AI chat with tool-use loop",
+        "Emotion classification system (5 signal types)",
+        "Auto-generated journal entries from conversations",
+        "Persistent user memory across conversations",
+        "Google OAuth + Email OTP authentication",
+        "Glassmorphism UI design system",
+      ],
+      link: "/unspiral",
+    },
+    {
       title: "beAPT",
       subtitle: "Athlete Management Platform",
       description:
@@ -608,6 +630,12 @@ function About() {
       role: "Co-Founder & CEO",
       company: "OneShot (AI Hiring Platform)",
       desc: "Solo-built full-stack SaaS with AI, payments, and video infrastructure",
+    },
+    {
+      period: "2025 — Now",
+      role: "Founder & Solo Developer",
+      company: "Unspiral (AI Emotional Coach)",
+      desc: "Built AI-powered mobile app with streaming chat, emotion classification, and journaling",
     },
     {
       period: "2019 — 2023",
