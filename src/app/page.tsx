@@ -632,10 +632,10 @@ function About() {
       desc: "Solo-built full-stack SaaS with AI, payments, and video infrastructure",
     },
     {
-      period: "2025 — Now",
-      role: "Founder & Solo Developer",
-      company: "Unspiral (AI Emotional Coach)",
-      desc: "Built AI-powered mobile app with streaming chat, emotion classification, and journaling",
+      period: "2024",
+      role: "MBA Student",
+      company: "Master of Business Administration",
+      desc: "Focused on business strategy, leadership, and entrepreneurship",
     },
     {
       period: "2019 — 2023",
