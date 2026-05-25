@@ -1,0 +1,1074 @@
+.deck-root {
+  /* Portfolio palette — light (scoped to the deck only) */
+  --bg-primary: #faf9fb;
+  --bg-secondary: #f1eef6;
+  --text-primary: #1a1726;
+  --text-strong: #100e1a;
+  --text-secondary: #565067;
+  --text-muted: #8e88a0;
+  --accent: #f43f5e;
+  --accent-2: #9333ea;
+  --accent-glow: rgba(244, 63, 94, 0.15);
+  --border-subtle: rgba(17, 12, 34, 0.10);
+  --border-hover: rgba(17, 12, 34, 0.18);
+  --font-display: 'Outfit', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  position: fixed;
+  inset: 0;
+  background-color: var(--bg-primary);
+  background-image:
+    radial-gradient(46rem 46rem at 8% -10%, rgba(244, 63, 94, 0.18), transparent 60%),
+    radial-gradient(42rem 42rem at 104% 110%, rgba(147, 51, 234, 0.18), transparent 60%),
+    linear-gradient(rgba(17, 12, 34, 0.032) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(17, 12, 34, 0.032) 1px, transparent 1px);
+  background-size: auto, auto, 54px 54px, 54px 54px;
+  background-attachment: fixed;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+.deck-root * { box-sizing: border-box; }
+.deck-root ::selection { background: var(--accent); color: var(--bg-primary); }
+
+/* ----------------------------------------------------------------------------
+   Stage: fixed 1280x720 design space, scaled to fit the viewport on screen.
+---------------------------------------------------------------------------- */
+.deck-root .stage {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 1280px;
+  height: 720px;
+  transform-origin: center center;
+}
+
+/* ----------------------------------------------------------------------------
+   Slide: one 1280x720 frame with atmospheric background.
+---------------------------------------------------------------------------- */
+.deck-root .slide {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  padding: 80px 96px;
+  /* Background is painted once on <body> so the grid stays continuous and
+     unscaled across the whole viewport; slides are transparent on screen.
+     Per-slide background is restored for print/PDF below. */
+  background: transparent;
+  overflow: hidden;
+}
+.deck-root .slide.active { display: flex; }
+.deck-root .slide { line-height: 1.6; }
+
+.deck-root .slide.center { align-items: center; text-align: center; }
+.deck-root .slide.section { align-items: flex-start; justify-content: center; }
+
+/* ----------------------------------------------------------------------------
+   Typography
+---------------------------------------------------------------------------- */
+@layer base {
+  .deck-root .slide h1 {
+    font-size: 76px;
+    font-weight: 700;
+    line-height: 1.0;
+    letter-spacing: -0.025em;
+    margin: 0;
+    color: var(--text-primary);
+  }
+  .deck-root .slide.cover h1 { font-size: 88px; }
+  .deck-root .slide.section h1 { font-size: 84px; }
+  .deck-root .slide h2 {
+    font-size: 30px;
+    font-weight: 600;
+    margin: 0;
+    color: #7c3aed;
+  }
+  .deck-root .slide p { margin: 0; }
+}
+
+.deck-root .eyebrow {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.deck-root .gradient-text {
+  background: linear-gradient(120deg, var(--accent) 0%, var(--accent-2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ----------------------------------------------------------------------------
+   Cover slide — orchestrated entrance + refined details
+---------------------------------------------------------------------------- */
+.deck-root .cover .gradient-text {
+  background: linear-gradient(110deg, #f43f5e 0%, #db2777 40%, #9333ea 75%, #7c3aed 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.deck-root .slide.cover h1 { line-height: 1.05; }
+/* title carries both the entrance (rise) and the looping shimmer */
+.deck-root .cover h1.gradient-text.reveal {
+  animation:
+    cover-rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.18s forwards,
+    cover-shimmer 9s ease-in-out 1.1s infinite;
+}
+
+/* glass eyebrow badge with a live pulse dot */
+.deck-root .cover-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 1px 2px rgba(17, 12, 34, 0.04), 0 10px 30px rgba(244, 63, 94, 0.08);
+  backdrop-filter: blur(10px);
+}
+.deck-root .cover-badge .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.5);
+  animation: cover-pulse 2.4s ease-in-out infinite;
+}
+
+/* specialist chips */
+.deck-root .spec-chip {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  padding: 7px 15px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 1px 2px rgba(17, 12, 34, 0.03);
+}
+
+/* tier comparison cards (Why Claude Code) */
+.deck-root .tier {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 18px;
+  padding: 26px 24px 22px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 1px 2px rgba(17, 12, 34, 0.04), 0 10px 26px rgba(17, 12, 34, 0.05);
+  backdrop-filter: blur(8px);
+}
+.deck-root .tier-emoji {
+  font-size: 30px;
+  line-height: 1;
+}
+.deck-root .tier-name {
+  margin-top: 14px;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+.deck-root .tier-sub {
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+}
+.deck-root .tier-feats {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  font-size: 15.5px;
+  color: var(--text-secondary);
+}
+.deck-root .tier-feats .row { display: flex; align-items: center; gap: 9px; white-space: nowrap; }
+.deck-root .mk { color: var(--accent); font-weight: 700; flex-shrink: 0; }
+.deck-root .no { color: var(--text-muted); flex-shrink: 0; }
+
+.deck-root .tier-tag {
+  margin-top: auto;
+  padding-top: 18px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+}
+.deck-root .tier-tag b { color: var(--text-secondary); font-weight: 600; }
+.deck-root .tier.feature .tier-tag b { color: var(--accent); }
+
+/* the highlighted destination tier */
+.deck-root .tier.feature {
+  background: linear-gradient(160deg, rgba(244, 63, 94, 0.07), rgba(147, 51, 234, 0.07));
+  border-color: rgba(244, 63, 94, 0.4);
+  box-shadow: 0 1px 2px rgba(17, 12, 34, 0.05), 0 18px 40px rgba(244, 63, 94, 0.12);
+  transform: translateY(-8px);
+}
+.deck-root .tier-ribbon {
+  position: absolute;
+  top: -13px;
+  left: 24px;
+  padding: 5px 13px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  box-shadow: 0 6px 16px rgba(244, 63, 94, 0.3);
+}
+
+/* the workflow flow (numbered step cards on a connecting rail) */
+.deck-root .step-flow {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 36px;
+}
+.deck-root .step-rail {
+  position: absolute;
+  top: 44px;
+  left: 16%;
+  right: 16%;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(244, 63, 94, 0.15), rgba(147, 51, 234, 0.45));
+  z-index: 0;
+}
+.deck-root .step-card {
+  position: relative;
+  z-index: 1;
+  width: 252px;
+  padding: 26px 26px 24px;
+  text-align: left;
+  border-radius: 20px;
+}
+.deck-root .step-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.deck-root .step-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  box-shadow: 0 8px 18px rgba(244, 63, 94, 0.28);
+}
+.deck-root .step-icon {
+  color: var(--accent);
+  opacity: 0.85;
+}
+.deck-root .step-eyebrow {
+  margin-top: 20px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.deck-root .step-title {
+  margin-top: 4px;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+.deck-root .step-desc {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.deck-root .step-prompt {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-subtle);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+.deck-root .step-card-final .step-prompt { border-top-color: rgba(244, 63, 94, 0.22); }
+.deck-root .step-badge-row { margin-top: 16px; }
+
+/* clickable "mode" badge below a step card (opens an explainer modal) */
+.deck-root .mode-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--accent-2);
+  background: rgba(147, 51, 234, 0.08);
+  border: 1px solid rgba(147, 51, 234, 0.25);
+  cursor: pointer;
+  transition: background 0.16s ease, border-color 0.16s ease, transform 0.16s ease;
+}
+.deck-root .mode-badge::before {
+  content: "?";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  border-radius: 999px;
+  font-size: 10px;
+  color: #fff;
+  background: var(--accent-2);
+}
+.deck-root .mode-badge:hover {
+  background: rgba(147, 51, 234, 0.14);
+  border-color: rgba(147, 51, 234, 0.45);
+  transform: translateY(-1px);
+}
+
+/* prose explainer modal (mode badges) */
+.deck-root .info-modal {
+  width: min(560px, 92vw);
+  max-height: 84vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 24px 70px rgba(17, 12, 34, 0.28);
+  overflow: hidden;
+  animation: modal-rise 0.22s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.deck-root .info-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-secondary);
+}
+.deck-root .info-modal-title {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+.deck-root .info-modal-head button { display: inline-flex; color: var(--text-muted); cursor: pointer; }
+.deck-root .info-modal-head button:hover { color: var(--accent); }
+.deck-root .info-modal-body {
+  padding: 22px 26px 26px;
+  overflow: auto;
+  font-size: 16px;
+  line-height: 1.62;
+  color: var(--text-secondary);
+}
+.deck-root .info-modal-body p { margin: 0 0 14px; }
+.deck-root .info-modal-body p:last-child { margin-bottom: 0; }
+.deck-root .info-modal-how {
+  margin-top: 4px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-subtle);
+  font-size: 15px;
+  color: var(--text-muted);
+}
+.deck-root .info-modal-body kbd {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+.deck-root .info-modal-steps {
+  margin: 0 0 14px;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.deck-root .info-modal-steps li {
+  counter-increment: step;
+  position: relative;
+  padding-left: 38px;
+  line-height: 1.5;
+}
+.deck-root .info-modal-steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+}
+/* final step is the payoff: highlighted destination */
+.deck-root .step-card-final {
+  background: linear-gradient(160deg, rgba(244, 63, 94, 0.08), rgba(147, 51, 234, 0.08));
+  border-color: rgba(244, 63, 94, 0.4);
+  box-shadow: 0 1px 2px rgba(17, 12, 34, 0.05), 0 18px 40px rgba(244, 63, 94, 0.14);
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+/* capability icon badge (What Claude Code is) */
+.deck-root .cap-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  color: var(--accent);
+  background: linear-gradient(145deg, rgba(244, 63, 94, 0.14), rgba(147, 51, 234, 0.12));
+  border: 1px solid var(--border-subtle);
+}
+
+/* skill cards (Hire pre-built specialists) */
+.deck-root .skill-card { position: relative; }
+.deck-root .skill-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  color: var(--accent);
+  background: linear-gradient(145deg, rgba(244, 63, 94, 0.14), rgba(147, 51, 234, 0.12));
+  border: 1px solid var(--border-subtle);
+  transition: transform 0.25s ease;
+}
+.deck-root .skill-card:hover .skill-icon { transform: scale(1.06) rotate(-3deg); }
+.deck-root .skill-arrow {
+  color: var(--text-muted);
+  opacity: 0;
+  transform: translate(-3px, 3px);
+  transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+.deck-root .skill-card:hover .skill-arrow { opacity: 1; transform: none; color: var(--accent); }
+
+/* connected-tools cards (Meet them where you work) */
+.deck-root .tool-card {
+  display: flex;
+  flex-direction: column;
+  padding: 26px 24px 24px;
+}
+.deck-root .tool-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  box-shadow: 0 8px 20px rgba(244, 63, 94, 0.28);
+  transition: transform 0.25s ease;
+}
+.deck-root .tool-card:hover .tool-icon { transform: scale(1.06) rotate(-3deg); }
+.deck-root .tool-name {
+  margin-top: 18px;
+  font-size: 23px;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+.deck-root .tool-desc {
+  margin-top: 8px;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+.deck-root .tool-eg {
+  margin-top: auto;
+  padding-top: 16px;
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  font-style: italic;
+  color: var(--accent);
+}
+
+/* manage-context cards (do / watch) */
+.deck-root .ctx-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  color: var(--accent);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--border-subtle);
+}
+.deck-root .ctx-icon-warn {
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  border-color: transparent;
+  box-shadow: 0 8px 20px rgba(244, 63, 94, 0.28);
+}
+.deck-root .ctx-dot {
+  margin-top: 11px;
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+/* team role cards (Meet your team) */
+.deck-root .role-card {
+  display: flex;
+  flex-direction: column;
+  padding: 26px 26px 24px;
+  text-align: left;
+  overflow: hidden;
+}
+.deck-root .role-card::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.deck-root .role-card { position: relative; }
+.deck-root .role-card:hover::after { opacity: 1; }
+.deck-root .role-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.deck-root .role-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 999px;
+  background: linear-gradient(145deg, rgba(244, 63, 94, 0.22), rgba(147, 51, 234, 0.2));
+  border: 1px solid var(--border-subtle);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.deck-root .role-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 12%;
+}
+.deck-root .role-num {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--text-muted);
+  opacity: 0.55;
+}
+.deck-root .role-name {
+  margin-top: 18px;
+  font-size: 23px;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+.deck-root .role-desc {
+  margin-top: 7px;
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+.deck-root .reveal.d6 { animation-delay: 0.74s; }
+
+/* quote callout */
+.deck-root .callout {
+  position: relative;
+  padding: 18px 24px 18px 28px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 1px 2px rgba(17, 12, 34, 0.04), 0 10px 28px rgba(17, 12, 34, 0.05);
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+}
+.deck-root .callout::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+}
+
+/* hairline gradient rule */
+.deck-root .cover-rule {
+  height: 2px;
+  width: 120px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  opacity: 0.85;
+}
+
+/* staggered reveal: each .reveal child animates up + blur-in */
+.deck-root .reveal {
+  opacity: 0;
+  animation: cover-rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.deck-root .reveal.d1 { animation-delay: 0.05s; }
+.deck-root .reveal.d2 { animation-delay: 0.18s; }
+.deck-root .reveal.d3 { animation-delay: 0.32s; }
+.deck-root .reveal.d4 { animation-delay: 0.46s; }
+.deck-root .reveal.d5 { animation-delay: 0.60s; }
+
+@keyframes cover-rise {
+  from { opacity: 0; transform: translateY(22px); filter: blur(8px); }
+  to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+}
+@keyframes cover-shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+@keyframes cover-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.45); }
+  70%  { box-shadow: 0 0 0 9px rgba(244, 63, 94, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .deck-root .reveal { opacity: 1; animation: none; }
+  .deck-root .cover h1.gradient-text.reveal,
+  .deck-root .cover .gradient-text,
+  .deck-root .cover-badge .dot { animation: none; }
+}
+
+.deck-root .dim { color: var(--text-secondary); }
+.deck-root .muted { color: var(--text-muted); }
+.deck-root strong, .deck-root b { color: var(--text-strong); font-weight: 700; }
+
+/* mono code chip */
+.deck-root code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  color: #e11d62;
+  background: rgba(244, 63, 94, 0.10);
+  border: 1px solid rgba(244, 63, 94, 0.24);
+  padding: 1px 7px;
+  border-radius: 5px;
+}
+
+/* ----------------------------------------------------------------------------
+   Components
+---------------------------------------------------------------------------- */
+.deck-root .glass {
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(17, 12, 34, 0.04), 0 8px 24px rgba(17, 12, 34, 0.05);
+  backdrop-filter: blur(10px);
+  transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+.deck-root .glass:hover {
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 4px rgba(17, 12, 34, 0.06), 0 14px 32px rgba(244, 63, 94, 0.10);
+  transform: translateY(-3px);
+}
+
+.deck-root .pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 7px 14px;
+}
+
+/* code block (folder tree, install) */
+.deck-root .codeblock {
+  font-family: var(--font-mono);
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(17, 12, 34, 0.04), 0 8px 24px rgba(17, 12, 34, 0.05);
+  padding: 22px 26px;
+  white-space: pre;
+}
+.deck-root .codeblock .c { color: var(--text-muted); }
+.deck-root .codeblock .k { color: #e11d62; }
+
+/* ----------------------------------------------------------------------------
+   Expandable code + modal (view full CLAUDE.md)
+---------------------------------------------------------------------------- */
+.deck-root .code-expand {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 5px 10px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.deck-root .code-expand:hover { color: var(--accent); border-color: var(--accent); }
+
+.deck-root .code-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: rgba(17, 12, 34, 0.35);
+  backdrop-filter: blur(6px);
+  animation: modal-fade 0.18s ease forwards;
+}
+.deck-root .code-modal {
+  width: min(820px, 92vw);
+  max-height: 84vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 24px 70px rgba(17, 12, 34, 0.28);
+  overflow: hidden;
+  animation: modal-rise 0.22s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.deck-root .code-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  background: var(--bg-secondary);
+}
+.deck-root .code-modal-actions { display: inline-flex; align-items: center; gap: 14px; }
+.deck-root .code-modal-head button { display: inline-flex; align-items: center; color: var(--text-muted); cursor: pointer; }
+.deck-root .code-modal-head button:hover { color: var(--accent); }
+.deck-root .code-copy {
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-secondary) !important;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 5px 10px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.deck-root .code-copy:hover { border-color: var(--accent); }
+.deck-root .code-modal-body {
+  margin: 0;
+  padding: 24px 28px;
+  overflow: auto;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  white-space: pre;
+}
+.deck-root .code-modal-body .k { color: #e11d62; font-weight: 600; }
+@keyframes modal-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modal-rise {
+  from { opacity: 0; transform: translateY(14px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ----------------------------------------------------------------------------
+   Chrome: progress dots + hint (screen only)
+---------------------------------------------------------------------------- */
+.deck-root .chrome { position: fixed; z-index: 50; }
+.deck-root .progress {
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+.deck-root .dot {
+  width: 7px; height: 7px;
+  border-radius: 999px;
+  background: rgba(17, 12, 34, 0.18);
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+/* section-divider dots: darker + taller so sections are easy to spot/jump to */
+.deck-root .dot.section {
+  background: rgba(17, 12, 34, 0.35);
+}
+.deck-root .dot.section:hover { background: rgba(17, 12, 34, 0.5); }
+.deck-root .dot.on { background: var(--accent); width: 22px; }
+.deck-root .dot.section.on { background: var(--accent); width: 22px; height: 7px; }
+.deck-root .counter {
+  bottom: 20px; right: 26px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ----------------------------------------------------------------------------
+   Whisper / voice-to-brief card (Talk, don't type)
+---------------------------------------------------------------------------- */
+.deck-root .whisper-card {
+  padding: 26px 28px 24px;
+  display: flex;
+  flex-direction: column;
+}
+.deck-root .whisper-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.deck-root .whisper-mic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  box-shadow: 0 8px 18px rgba(244, 63, 94, 0.28);
+  position: relative;
+}
+.deck-root .whisper-mic::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.45);
+  animation: whisper-pulse 2.4s ease-in-out infinite;
+}
+.deck-root .whisper-wave {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 44px;
+}
+.deck-root .whisper-wave span {
+  flex: 1;
+  min-width: 3px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  opacity: 0.85;
+  transform-origin: center;
+  animation: whisper-bar 1.3s ease-in-out infinite;
+}
+.deck-root .whisper-key {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+.deck-root .whisper-said {
+  margin-top: 18px;
+  font-size: 15.5px;
+  line-height: 1.55;
+  font-style: italic;
+  color: var(--text-secondary);
+}
+.deck-root .whisper-arrow {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0 2px;
+  color: var(--accent);
+  opacity: 0.7;
+}
+.deck-root .whisper-brief {
+  margin-top: 8px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: linear-gradient(160deg, rgba(244, 63, 94, 0.07), rgba(147, 51, 234, 0.07));
+  border: 1px solid rgba(244, 63, 94, 0.28);
+}
+.deck-root .whisper-brief-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+.deck-root .whisper-brief ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.deck-root .whisper-brief li {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 15.5px;
+  color: var(--text-strong);
+}
+.deck-root .whisper-tag {
+  flex-shrink: 0;
+  width: 74px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+}
+@keyframes whisper-bar {
+  0%, 100% { transform: scaleY(0.45); }
+  50%      { transform: scaleY(1); }
+}
+@keyframes whisper-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.45); }
+  70%  { box-shadow: 0 0 0 8px rgba(244, 63, 94, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
+}
+
+/* ----------------------------------------------------------------------------
+   Multi-tabs slide: parallel "tab" lanes (one tab = one task)
+---------------------------------------------------------------------------- */
+.deck-root .tabs-lanes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.deck-root .tabs-lane {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+.deck-root .tabs-lane-chrome {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.45);
+}
+.deck-root .tabs-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: rgba(17, 12, 34, 0.14);
+}
+.deck-root .tabs-dot:first-child { background: rgba(244, 63, 94, 0.55); }
+.deck-root .tabs-lane-num {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.deck-root .tabs-lane-body {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 20px 18px;
+}
+.deck-root .tabs-lane-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding: 12px 20px 18px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  color: var(--accent-2);
+}
+.deck-root .tabs-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.5);
+  animation: cover-pulse 2.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .deck-root .whisper-wave span,
+  .deck-root .whisper-mic::after,
+  .deck-root .tabs-live-dot { animation: none; }
+}
+
+/* ----------------------------------------------------------------------------
+   Print: every slide becomes a landscape page.
+---------------------------------------------------------------------------- */
+@page { size: 1280px 720px; margin: 0; }
+
+@media print {
+  .deck-root { overflow: visible; background: var(--bg-primary); }
+  .deck-root .chrome { display: none !important; }
+  .deck-root .code-expand { display: none !important; }
+  .deck-root .stage {
+    position: static;
+    transform: none !important;
+    width: auto;
+    height: auto;
+  }
+  .deck-root .slide {
+    position: relative;
+    display: flex !important;
+    width: 1280px;
+    height: 720px;
+    break-after: page;
+    page-break-after: always;
+    background-color: var(--bg-primary);
+    background-image:
+      radial-gradient(46rem 46rem at 8% -18%, rgba(244, 63, 94, 0.18), transparent 60%),
+      radial-gradient(42rem 42rem at 104% 118%, rgba(147, 51, 234, 0.18), transparent 60%),
+      linear-gradient(rgba(17, 12, 34, 0.032) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(17, 12, 34, 0.032) 1px, transparent 1px);
+    background-size: auto, auto, 54px 54px, 54px 54px;
+  }
+  .deck-root .glass:hover { transform: none; border-color: var(--border-subtle); background: rgba(255, 255, 255, 0.65); }
+  /* keep colors in PDF */
+  .deck-root * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
