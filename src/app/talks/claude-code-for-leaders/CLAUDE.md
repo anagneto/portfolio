@@ -9,10 +9,11 @@ A minimalist slide deck, "Claude Code for Leaders: Your Team of Specialists", a
 Growth, Marketing & Operations leaders). It lives as a route inside the
 portfolio Next.js app (it used to be a standalone deck; that's archived).
 
-The narrative source (full speaker notes and rationale) lives at:
-`~/Personal Assistant/projects/happyfact/claude-code-for-leaders-deck.md`
-There is also a Notion version in Ana's Personal Dashboard. If you change content
-here, keep these in sync (or flag the divergence).
+The narrative source (full speaker notes and rationale) now lives alongside this
+deck at `./NARRATIVE.md` (moved here from `~/Personal Assistant/projects/happyfact/`).
+There is also a Notion version in Ana's Personal Dashboard; it is currently stale
+(describes the old standalone deck). If you change slide content, update
+`NARRATIVE.md` too, and flag the Notion divergence.
 
 ## Where things are (all relative to this folder)
 - `slides.tsx`   single source of truth for slide content (array of `{ variant?, node }`)
