@@ -76,7 +76,9 @@ export function ExpandableCode({
               </pre>
             </div>
           </div>,
-          document.body
+          // Portal into the scoped .deck-root (not <body>) so the deck's scoped
+          // CSS + variables apply, while still escaping the .stage transform.
+          document.getElementById("deck-root") ?? document.body
         )}
     </div>
   );

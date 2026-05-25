@@ -23,9 +23,11 @@ import {
   Mic,
   AlertTriangle,
   Eraser,
+  Download,
 } from "lucide-react";
 import { ExpandableCode } from "./CodeModal";
 import { ModeBadge } from "./ModeBadge";
+import { Accordion } from "./Accordion";
 
 type Slide = { variant?: string; node: ReactNode };
 
@@ -34,6 +36,32 @@ const ACCENT = "var(--accent)";
 /* Corey Haines' marketing skills (the ones Ana actually uses).
    Each card links to its folder in the repo. */
 const SKILLS_REPO = "https://github.com/coreyhaines31/marketingskills/tree/main/skills";
+
+/* The example team brief. Shown on the "Give your team a brief" slide AND
+   called back to from the "Start this week" step 2 modal, so it lives here
+   once to keep the two in sync. */
+const SAMPLE_CLAUDE_MD = `# CLAUDE.md — My fractional growth practice
+
+## How I work
+- I'm a fractional growth lead serving 3 clients at once.
+- Always plan first, save the plan, then execute on /clear.
+- No em dashes. Concise and direct.
+
+## My team (team/)
+- researcher/      market, competitors, audience
+- strategist/      OKRs, MOKAS, positioning
+- copywriter/      pages, emails, ads
+- chief-of-staff/  prep, planning, tasks
+Each folder has its own CLAUDE.md with that specialist's rules.
+
+## My clients (clients/)
+- Each client has clients/<name>/brief.md: voice, goals, constraints.
+- Point a specialist at the right brief before asking for work.
+
+## Standing rules
+- Save every deliverable to docs/ and list it in docs/INDEX.md
+- Verify facts before presenting them. I'm the editor.
+- Keep briefs current; stale context misleads the team.`;
 
 /* ---------- shared building blocks ---------- */
 
@@ -548,28 +576,7 @@ export const slides: Slide[] = [
           </div>
           <ExpandableCode
             title="CLAUDE.md"
-            full={`# CLAUDE.md — My fractional growth practice
-
-## How I work
-- I'm a fractional growth lead serving 3 clients at once.
-- Always plan first, save the plan, then execute on /clear.
-- No em dashes. Concise and direct.
-
-## My team (team/)
-- researcher/      market, competitors, audience
-- strategist/      OKRs, MOKAS, positioning
-- copywriter/      pages, emails, ads
-- chief-of-staff/  prep, planning, tasks
-Each folder has its own CLAUDE.md with that specialist's rules.
-
-## My clients (clients/)
-- Each client has clients/<name>/brief.md: voice, goals, constraints.
-- Point a specialist at the right brief before asking for work.
-
-## Standing rules
-- Save every deliverable to docs/ and list it in docs/INDEX.md
-- Verify facts before presenting them. I'm the editor.
-- Keep briefs current; stale context misleads the team.`}
+            full={SAMPLE_CLAUDE_MD}
             preview={
               <pre className="codeblock text-[16px]">
                 <span className="c"># CLAUDE.md</span>{"\n"}
@@ -1419,15 +1426,133 @@ something. I should be able to read your top line and know what to do.
 
   // 27 — start this week
   {
+    variant: "top",
     node: (
       <>
-        <ContentHead>Start this week</ContentHead>
-        <ol className="space-y-6 text-[25px]">
-          <li><b style={{ color: ACCENT }}>1.</b> <b>Install it</b> (or open Cowork first if the terminal scares you)</li>
-          <li><b style={{ color: ACCENT }}>2.</b> Set up your <b>team</b>: a short CLAUDE.md + one specialist folder</li>
-          <li><b style={{ color: ACCENT }}>3.</b> Give that specialist <b>one real task</b>, using Gather → Plan → Execute</li>
-        </ol>
-        <p className="mt-12 text-[22px] dim">Don&apos;t build the whole system. Get one win.</p>
+        <div className="eyebrow mb-2">Getting started</div>
+        <h1 className="mb-3">Start this week</h1>
+        <p className="text-[23px] mb-5" style={{ color: "var(--text-secondary)" }}>
+          The terminal is just a text box. You type in{" "}
+          <b className="gradient-text">plain English</b>, not code.
+        </p>
+
+        <Accordion
+          items={[
+            {
+              title: "Install it",
+              body: (
+                <>
+                  A 5-minute, one-time setup. Or skip it entirely and open Cowork, no install needed.
+                  <div className="acc-artifact">
+                    <div>
+                      Mac / Linux:{" "}
+                      <code>curl -fsSL https://claude.ai/install.sh | bash</code>
+                    </div>
+                    <div className="mt-2">
+                      Windows: <code>irm https://claude.ai/install.ps1 | iex</code>
+                    </div>
+                    <div className="mt-3">
+                      <ModeBadge label="Show me exactly" title="Install it, step by step">
+                        <p>
+                          You have <b>never</b> opened a terminal? Perfect, here is the whole thing.
+                          It is just a window that runs the lines you paste.
+                        </p>
+                        <ol className="info-modal-steps">
+                          <li>
+                            <b>Open the terminal.</b> Mac: press <kbd>Cmd</kbd> + <kbd>Space</kbd>,
+                            type <i>Terminal</i>, hit Enter. Windows: open the <b>Start</b> menu, type{" "}
+                            <i>PowerShell</i>, hit Enter.
+                          </li>
+                          <li>
+                            <b>Breathe.</b> This window only runs lines you paste into it. Reading these
+                            cannot break your computer.
+                          </li>
+                          <li>
+                            <b>Paste the install line</b> and press Enter, then wait a minute. Mac/Linux:{" "}
+                            <code>curl -fsSL https://claude.ai/install.sh | bash</code>. Windows:{" "}
+                            <code>irm https://claude.ai/install.ps1 | iex</code>.
+                          </li>
+                          <li>
+                            <b>Start it.</b> Type <code>claude</code> and press Enter. The first time, it
+                            opens your browser to log in once.
+                          </li>
+                          <li>
+                            <b>You did it</b> when Claude greets you and you can type a request in plain
+                            English.
+                          </li>
+                        </ol>
+                        <p className="info-modal-how">
+                          <b>Rather not?</b> Open <b>Claude Cowork</b> instead, same brain, in a normal
+                          chat window, nothing to install.
+                        </p>
+                      </ModeBadge>
+                    </div>
+                  </div>
+                </>
+              ),
+            },
+            {
+              title: "Set up your team",
+              body: (
+                <>
+                  Write a short CLAUDE.md (who they are) and make one specialist folder. That is the
+                  whole &ldquo;team&rdquo;, the same one from earlier.
+                  <div className="acc-artifact">
+                    <div className="mt-3">
+                      <ModeBadge label="Show me exactly" title="A real CLAUDE.md">
+                        <p>The same brief from earlier. Yours can be even shorter to start.</p>
+                        <pre className="codeblock codeblock-wrapped">{SAMPLE_CLAUDE_MD}</pre>
+                      </ModeBadge>
+                    </div>
+                  </div>
+                </>
+              ),
+            },
+            {
+              title: "Give one real task",
+              body: (
+                <>
+                  Pick one task you would actually delegate. Walk it through{" "}
+                  <b style={{ color: "var(--text-strong)" }}>Gather &rarr; Plan &rarr; Execute</b>.
+                  <div className="acc-artifact">
+                    <div className="mt-3">
+                      <ModeBadge label="Show me exactly" title="One real first task">
+                      <p>
+                        Say this to your <b>social strategist</b>, one message at a time:
+                      </p>
+                      <ol className="info-modal-steps">
+                        <li>
+                          <b>Gather + goal:</b> <i>&ldquo;Read clients/acme/brief.md and our last 10
+                          LinkedIn posts. I want 5 post ideas for Acme for next week.&rdquo;</i>
+                        </li>
+                        <li>
+                          <b>Plan:</b> <i>&ldquo;Plan it first, don&rsquo;t write anything yet. Save the
+                          plan.&rdquo;</i> You read it, tweak it, approve.
+                        </li>
+                        <li>
+                          <b>Execute:</b> run <code>/clear</code>, then{" "}
+                          <i>&ldquo;Now run the plan.&rdquo;</i>
+                        </li>
+                      </ol>
+                      <p className="info-modal-how">
+                        <b>That is the whole loop.</b> Every task, big or small, is this same three-step
+                        rhythm.
+                      </p>
+                      </ModeBadge>
+                    </div>
+                  </div>
+                </>
+              ),
+            },
+          ]}
+        />
+
+        <p className="mt-5 text-[20px] dim">
+          Don&apos;t build the whole system. Get one win.{" "}
+          <span className="muted text-[16px]">
+            Too much? Open <b>Cowork</b> first, same brain, in a chat window.
+          </span>
+        </p>
       </>
     ),
   },
@@ -1478,8 +1603,10 @@ something. I should be able to read your top line and know what to do.
           <div>
             <div className="mb-4 text-[20px] font-bold text-[var(--text-strong)]">Install</div>
             <pre className="codeblock text-[16px]">
-              brew install claude-code{"\n"}
-              claude --version{"\n"}
+              <span className="c"># Mac / Linux</span>{"\n"}
+              curl -fsSL https://claude.ai/install.sh | bash{"\n"}
+              <span className="c"># Windows (PowerShell)</span>{"\n"}
+              irm https://claude.ai/install.ps1 | iex{"\n"}
               cd ~/my-work &amp;&amp; claude
             </pre>
             <p className="mt-4 text-[16px] dim">No terminal yet? Try Claude Cowork on the desktop app.</p>
@@ -1516,7 +1643,14 @@ something. I should be able to read your top line and know what to do.
       <>
         <h1 className="gradient-text">Thank you</h1>
         <p className="mt-8 text-[24px] dim">Questions, disagreement, honest takes welcome.</p>
-        <p className="mt-10 text-[18px] muted">Ana Neto</p>
+        <a
+          href="/talks/claude-code-for-leaders-workspace.zip"
+          download
+          className="deck-dl-btn"
+        >
+          <Download size={18} /> Grab the starter workspace
+        </a>
+        <p className="mt-8 text-[18px] muted">Ana Neto</p>
       </>
     ),
   },

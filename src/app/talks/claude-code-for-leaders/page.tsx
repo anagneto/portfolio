@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <div className="deck-root">
+    <div id="deck-root" className="deck-root">
       <Deck />
     </div>
   );

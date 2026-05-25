@@ -67,6 +67,7 @@
 
 .deck-root .slide.center { align-items: center; text-align: center; }
 .deck-root .slide.section { align-items: flex-start; justify-content: center; }
+.deck-root .slide.top { justify-content: flex-start; padding-top: 60px; }
 
 /* ----------------------------------------------------------------------------
    Typography
@@ -1036,6 +1037,100 @@
   .deck-root .whisper-wave span,
   .deck-root .whisper-mic::after,
   .deck-root .tabs-live-dot { animation: none; }
+}
+
+/* ----------------------------------------------------------------------------
+   Accordion: the "Start this week" step list. Rows collapse via a grid
+   0fr -> 1fr trick (the body has overflow:hidden so padding clips when closed).
+---------------------------------------------------------------------------- */
+.deck-root .acc { display: flex; flex-direction: column; gap: 10px; }
+.deck-root .acc-row {
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.5);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.deck-root .acc-row.open {
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.78);
+}
+.deck-root .acc-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 13px 24px;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-display);
+}
+.deck-root .acc-num {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+}
+.deck-root .acc-title {
+  flex: 1;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+.deck-root .acc-chev {
+  flex: none;
+  color: var(--text-muted);
+  transition: transform 0.25s ease, color 0.2s ease;
+}
+.deck-root .acc-row.open .acc-chev { transform: rotate(180deg); color: var(--accent); }
+.deck-root .acc-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.28s ease;
+}
+.deck-root .acc-row.open .acc-panel { grid-template-rows: 1fr; }
+.deck-root .acc-body {
+  overflow: hidden;
+  min-height: 0;
+  padding: 0 24px 0 78px;
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+.deck-root .acc-row.open .acc-body { padding-bottom: 18px; }
+.deck-root .acc-artifact { margin-top: 10px; }
+/* Smaller, wrapping code block so a full file fits inside the narrow info-modal. */
+.deck-root .codeblock-wrapped {
+  font-size: 12.5px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Download CTA button (close / thank-you slide). */
+.deck-root .deck-dl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 36px;
+  padding: 13px 26px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  box-shadow: 0 10px 30px var(--accent-glow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.deck-root .deck-dl-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px var(--accent-glow);
 }
 
 /* ----------------------------------------------------------------------------
