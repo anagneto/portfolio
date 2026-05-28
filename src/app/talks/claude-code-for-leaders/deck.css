@@ -1113,6 +1113,104 @@
   word-break: break-word;
 }
 
+/* ----------------------------------------------------------------------------
+   Interactive folder tree (FileTree.tsx) — pink dirs collapse/expand.
+   Shares the codeblock surface + the accordion's 0fr->1fr collapse animation.
+---------------------------------------------------------------------------- */
+.deck-root .ft {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(17, 12, 34, 0.04), 0 8px 24px rgba(17, 12, 34, 0.05);
+  padding: 14px 12px;
+}
+.deck-root .ft-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-right: 12px;
+  border-radius: 9px;
+  text-align: left;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+.deck-root button.ft-row {
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.deck-root button.ft-row:hover { background: rgba(244, 63, 94, 0.06); }
+.deck-root button.ft-row:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.deck-root .ft-dir .ft-name { color: #e11d62; font-weight: 600; }
+.deck-root .ft-static .ft-name { color: var(--text-secondary); }
+
+/* Chevron: hidden for static rows, rotates + turns pink when its dir is open. */
+.deck-root .ft-twist {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+.deck-root .ft-toggle.open .ft-twist { transform: rotate(90deg); color: var(--accent); }
+
+.deck-root .ft-icon { flex-shrink: 0; color: #f0578a; }
+.deck-root .ft-icon.ft-file { color: var(--text-muted); }
+.deck-root .ft-name { white-space: nowrap; }
+.deck-root .ft-comment {
+  margin-left: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Children: the same height-collapse trick as .acc-panel, plus a fade. */
+.deck-root .ft-children {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.26s ease;
+}
+.deck-root .ft-children.open { grid-template-rows: 1fr; }
+.deck-root .ft-children-inner {
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+  opacity: 0;
+  transform: translateY(-3px);
+  transition: opacity 0.26s ease, transform 0.26s ease;
+}
+.deck-root .ft-children.open > .ft-children-inner {
+  opacity: 1;
+  transform: none;
+}
+/* Faint guide rail down each opened branch. */
+.deck-root .ft-guide {
+  position: absolute;
+  top: 2px;
+  bottom: 6px;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    rgba(244, 63, 94, 0.28),
+    rgba(244, 63, 94, 0.08)
+  );
+}
+@media (prefers-reduced-motion: reduce) {
+  .deck-root .ft-children,
+  .deck-root .ft-children-inner,
+  .deck-root .ft-twist { transition: none; }
+}
+
 /* Download CTA button (close / thank-you slide). */
 .deck-root .deck-dl-btn {
   display: inline-flex;

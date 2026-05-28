@@ -1,7 +1,8 @@
-# Globex — Client Brief
+# Globex — Client Context
 
-Single source of truth for Globex. Every specialist reads this before doing
-Globex work. Keep it current.
+This file loads automatically whenever I work inside Globex's folder. Single
+source of truth for Globex. Keep it current. End every task by folding in what
+changed.
 
 ## Snapshot
 - What they do: enterprise data-compliance platform (SOC2, GDPR, audit prep).

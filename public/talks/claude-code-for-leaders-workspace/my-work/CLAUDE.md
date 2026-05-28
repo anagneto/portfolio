@@ -11,23 +11,28 @@ operating manual for my whole team. Keep it lean and link out to detail.
 ## How I work (applies to every specialist)
 - Always plan first. Propose the plan, let me steer, save it, then execute.
 - One task per session. Run `/clear` between unrelated tasks.
-- Read the relevant brief before doing client work (see Clients below).
+- To work on a client, open their folder. Their CLAUDE.md loads automatically
+  (see Clients below). For portfolio-wide work, I run from here, the root.
 - Verify facts before presenting them. Flag anything you could not confirm.
 - No em dashes. Use commas, periods, or parentheses. Concise and direct.
 
-## My team (team/)
-Each specialist lives once, in its own folder, with its own CLAUDE.md:
-- team/researcher/      market, competitors, audience
-- team/strategist/      objectives, key results, positioning
-- team/copywriter/      landing pages, emails, ads
-- team/brainstorm/      pressure-tests my thinking
-- team/chief-of-staff/  prep, planning, deadlines across clients
-- team/analyst/         data, dashboards, client reports
-Point a specialist at the right client brief before asking for work.
+## My team (.claude/skills/)
+Each specialist is a skill: a folder with a SKILL.md. Its `description` line
+makes it self-activate, so I describe the task and the right one shows up.
+- researcher/      market, competitors, audience
+- strategist/      objectives, key results, positioning
+- copywriter/      landing pages, emails, ads
+- brainstorm/      pressure-tests my thinking
+- chief-of-staff/  prep, planning, deadlines across clients
+- analyst/         data, dashboards, client reports
+My skills follow me into every client folder, so I just open the client I'm on
+and describe the task.
 
 ## My clients (clients/)
 - Each client is a folder: clients/<name>/.
-- It starts with brief.md (voice, goals, constraints, banned words).
+- It has its own CLAUDE.md (voice, goals, current state, banned words). That
+  file loads automatically when I work inside the folder, so every specialist
+  starts knowing the client.
 - A client's outputs live WITH the client, in subfolders:
   research/, strategy/, copy/, reports/.
 - Everything about one client is in one place. To archive a client, I
@@ -42,8 +47,9 @@ Point a specialist at the right client brief before asking for work.
 - Treat me like a client here: read positioning.md before writing in my voice.
 
 ## Standing rules
-- Save every deliverable to the right folder. Never leave work in the chat.
+- Save every deliverable inside the client's folder. Never leave work in the chat.
 - After saving anything, add one line to INDEX.md (path, what, date).
-- Keep briefs current. A stale brief misleads the whole team.
+- End every task by updating that client's CLAUDE.md. A stale context misleads
+  every specialist who opens that folder next.
 - When in doubt about scope, voice, or a fact, ask me one question. Do not
   invent.

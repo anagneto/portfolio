@@ -18,6 +18,8 @@ import {
   ClipboardCheck,
   Target,
   FolderOpen,
+  CornerLeftUp,
+  Eye,
   ListChecks,
   Rocket,
   Mic,
@@ -28,6 +30,7 @@ import {
 import { ExpandableCode } from "./CodeModal";
 import { ModeBadge } from "./ModeBadge";
 import { Accordion } from "./Accordion";
+import { FileTree, type FsNode } from "./FileTree";
 
 type Slide = { variant?: string; node: ReactNode };
 
@@ -47,21 +50,82 @@ const SAMPLE_CLAUDE_MD = `# CLAUDE.md — My fractional growth practice
 - Always plan first, save the plan, then execute on /clear.
 - No em dashes. Concise and direct.
 
-## My team (team/)
+## My team (skills/)
+Each specialist is a skill: a folder with a SKILL.md.
 - researcher/      market, competitors, audience
 - strategist/      OKRs, MOKAS, positioning
 - copywriter/      pages, emails, ads
 - chief-of-staff/  prep, planning, tasks
-Each folder has its own CLAUDE.md with that specialist's rules.
+I don't pick a specialist. I describe the task and the
+matching skill activates itself.
 
 ## My clients (clients/)
-- Each client has clients/<name>/brief.md: voice, goals, constraints.
-- Point a specialist at the right brief before asking for work.
+- Each client is a folder with its own CLAUDE.md: voice, goals, current state.
+- To work on a client, I open their folder. Their CLAUDE.md loads itself, my
+  skills come with me. The whole portfolio? I work from here, the root.
 
 ## Standing rules
-- Save every deliverable to docs/ and list it in docs/INDEX.md
+- Save every deliverable inside the client's folder, list it in INDEX.md.
 - Verify facts before presenting them. I'm the editor.
-- Keep briefs current; stale context misleads the team.`;
+- End every task by updating that client's CLAUDE.md. Stale context misleads.`;
+
+/* The workspace shape for the "One team. Many clients." slide, rendered as an
+   interactive tree. Top level opens by default; pink dirs expand on click. */
+const WORKSPACE_TREE: FsNode = {
+  name: "my-work/",
+  dir: true,
+  defaultOpen: true,
+  children: [
+    { name: "CLAUDE.md", comment: "how your team works" },
+    {
+      name: "skills/",
+      dir: true,
+      comment: "shared specialists, one SKILL.md each",
+      children: [
+        { name: "researcher/", dir: true },
+        { name: "strategist/", dir: true },
+        { name: "copywriter/", dir: true },
+        { name: "brainstorm/", dir: true },
+        { name: "chief-of-staff/", dir: true },
+        { name: "analyst/", dir: true },
+      ],
+    },
+    {
+      name: "clients/",
+      dir: true,
+      comment: "one folder per client, open the one you're on",
+      children: [
+        {
+          name: "acme/",
+          dir: true,
+          children: [
+            { name: "CLAUDE.md", comment: "Acme's context, loads when you open this folder" },
+            { name: "research/", dir: true },
+            { name: "strategy/", dir: true },
+            { name: "copy/", dir: true },
+            { name: "reports/", dir: true },
+          ],
+        },
+        {
+          name: "globex/",
+          dir: true,
+          children: [{ name: "CLAUDE.md", comment: "Globex's context" }],
+        },
+      ],
+    },
+    {
+      name: "practice/",
+      dir: true,
+      comment: "your own business",
+      children: [
+        { name: "positioning.md" },
+        { name: "pipeline.md" },
+        { name: "planning/", dir: true },
+      ],
+    },
+    { name: "INDEX.md", comment: "one map of everything" },
+  ],
+};
 
 /* ---------- shared building blocks ---------- */
 
@@ -265,13 +329,16 @@ function SkillCard({
   );
 }
 
-/* One specialist: header (avatar + name + role), its CLAUDE.md brief on the
-   left, a couple of example prompts (callouts) on the right. */
+/* One specialist: header (avatar + name + role), its SKILL.md brief on the
+   left, a couple of example prompts (callouts) on the right. The `description`
+   is the line that makes a skill self-activate, so we surface it in the
+   preview on every specialist. */
 function SpecialistSlide({
   avatar,
   name,
   role,
   path,
+  description,
   brief,
   fullBrief,
   prompts,
@@ -280,6 +347,7 @@ function SpecialistSlide({
   name: string;
   role: string;
   path: string;
+  description: string;
   brief: string[];
   fullBrief: string;
   prompts: ReactNode[];
@@ -304,8 +372,12 @@ function SpecialistSlide({
             title={path}
             full={fullBrief}
             preview={
-              <pre className="codeblock text-[15.5px] leading-[1.7]">
+              <pre
+                className="codeblock text-[15.5px] leading-[1.7]"
+                style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}
+              >
                 <span className="c"># {path}</span>{"\n"}
+                <span className="k">description:</span> {description}{"\n"}
                 <span className="k"># {name}</span>{"\n"}
                 {brief.join("\n")}
               </pre>
@@ -569,8 +641,8 @@ export const slides: Slide[] = [
             <Bullets
               items={[
                 <><code>CLAUDE.md</code> = your team&apos;s <b>operating manual</b>, read automatically every session</>,
-                <>Contains: how you work, who your specialists are, your standing rules</>,
-                <>Write it once. Every specialist starts already briefed.</>,
+                <>Each specialist is a <b>skill</b>: a folder with a <code>SKILL.md</code> brief</>,
+                <>One line, the <code>description</code>, makes it self-activate. You describe the <b>task</b>, not the teammate.</>,
               ]}
             />
           </div>
@@ -585,8 +657,8 @@ export const slides: Slide[] = [
                 No em dashes. Always plan first.{"\n"}
                 {"\n"}
                 <span className="k">## My team</span>{"\n"}
-                team/ holds my specialists{"\n"}
-                clients/ holds each client brief{"\n"}
+                skills/ holds my specialists{"\n"}
+                clients/ holds a folder per client{"\n"}
                 {"\n"}
                 <span className="k">## Standing rules</span>{"\n"}
                 Save outputs to docs/, list in INDEX.md
@@ -607,32 +679,17 @@ export const slides: Slide[] = [
           <div className="text-[22px]">
             <Bullets
               items={[
-                <>Specialists live <b>once</b>, under <code>team/</code>, shared across every client</>,
-                <>Each client gets a folder: a short brief <b>plus its own outputs</b> (research, copy, reports)</>,
-                <>Your own <code>practice/</code> holds your business: positioning, pipeline, content</>,
+                <>Your specialists live <b>once</b> as skills, and follow you into <b>every</b> client folder</>,
+                <><b>Open the client you&apos;re working on.</b> Their <code>CLAUDE.md</code> loads itself, so Claude already knows that client</>,
+                <>Each client&apos;s work stays in their folder (research, copy, reports). End every task by updating their <code>CLAUDE.md</code></>,
               ]}
             />
             <div className="callout mt-9 text-[18px] italic leading-relaxed">
-              &ldquo;Acme&apos;s copywriter&rdquo; and &ldquo;Globex&apos;s copywriter&rdquo; are the
-              same copywriter, handed a different brief.
+              Work the root for the whole portfolio. Open a client&apos;s folder to go
+              deep on just them, with no other client in the room.
             </div>
           </div>
-          <pre className="codeblock text-[15px] leading-[1.65]">
-            <span className="k">my-work/</span>{"\n"}
-            {"  "}CLAUDE.md{"            "}<span className="c"># how your team works</span>{"\n"}
-            {"  "}<span className="k">team/</span>{"               "}<span className="c"># shared specialists</span>{"\n"}
-            {"    "}researcher/{"  "}strategist/{"  "}copywriter/{"\n"}
-            {"    "}brainstorm/{"  "}chief-of-staff/{"  "}analyst/{"\n"}
-            {"  "}<span className="k">clients/</span>{"\n"}
-            {"    "}<span className="k">acme/</span>{"\n"}
-            {"      "}brief.md{"         "}<span className="c"># voice, goals, constraints</span>{"\n"}
-            {"      "}research/{"  "}strategy/{"  "}copy/{"  "}reports/{"\n"}
-            {"    "}<span className="k">globex/</span>{"\n"}
-            {"      "}brief.md{"\n"}
-            {"  "}<span className="k">practice/</span>{"           "}<span className="c"># your own business</span>{"\n"}
-            {"    "}positioning.md{"  "}pipeline.md{"  "}planning/{"\n"}
-            {"  "}INDEX.md{"             "}<span className="c"># one map of everything</span>
-          </pre>
+          <FileTree root={WORKSPACE_TREE} />
         </div>
       </>
     ),
@@ -647,7 +704,8 @@ export const slides: Slide[] = [
         avatar="Researcher"
         name="Researcher"
         role="market · competitors · audience"
-        path="team/researcher/CLAUDE.md"
+        path="skills/researcher/SKILL.md"
+        description="market, competitor & audience research"
         brief={[
           "Maps markets, competitors, audiences.",
           "",
@@ -655,7 +713,11 @@ export const slides: Slide[] = [
           "- Tables over essays",
           "- Flag what you couldn't verify",
         ]}
-        fullBrief={`# Researcher
+        fullBrief={`---
+name: researcher
+description: Researches markets, competitors, and audiences and returns decision-ready findings. Use when you need a competitor teardown, market sizing, audience or buyer research, review and forum mining, or a pricing and positioning scan.
+---
+# Researcher
 
 ## Role
 You research markets, competitors, and audiences for my clients. You produce
@@ -670,9 +732,9 @@ so lead with the call.
   If a request drifts there, say so and hand it off.
 
 ## Before you start
-- Read the client brief first: clients/<name>/brief.md. It tells you their
-  audience, goals, and what they already know.
-- Skim clients/<name>/research/ so you don't repeat existing work.
+- We work inside the client's folder, so their CLAUDE.md is already loaded:
+  their audience, goals, and what they already know.
+- Skim ./research/ so you don't repeat existing work.
 - If the goal is vague, ask me one sharp question before you spend time.
 
 ## How you work
@@ -684,18 +746,20 @@ so lead with the call.
   Copywriter and Strategist.
 
 ## Output
-- Save to clients/<name>/research/<topic>.md and add one line to INDEX.md.
+- Save to ./research/<topic>.md and add one line to INDEX.md.
 - Structure every report:
   1. Takeaway (2-3 sentences: what this means for the client)
   2. Evidence (tables, quotes, sources with dates)
   3. Open questions (what still needs verifying, and how)
 - Keep it skimmable. If it's longer than two screens, it's a deck, not research.
+- If you learned something durable about this client (a positioning angle, a
+  competitor to watch), add it to their CLAUDE.md so it's there next time.
 
 ## Example tasks
-- "Read Acme's brief. Find their top 5 competitors and build a comparison table:
+- "Find this client's top 5 competitors and build a comparison table:
   positioning, pricing, key claims, weak spots."
-- "Mine reviews and forums for what Globex's buyers actually complain about.
-  Quote them. Group the complaints into themes."`}
+- "Mine reviews and forums for what this client's buyers actually complain
+  about. Quote them. Group the complaints into themes."`}
         prompts={[
           <>&ldquo;Find this client&apos;s top 5 competitors. Build a comparison table: positioning, pricing, key claims.&rdquo;</>,
           <>&ldquo;Summarize what target buyers complain about in reviews and forums.&rdquo;</>,
@@ -711,7 +775,8 @@ so lead with the call.
         avatar="Strategist"
         name="Strategist"
         role="OKRs · MOKAS · positioning"
-        path="team/strategist/CLAUDE.md"
+        path="skills/strategist/SKILL.md"
+        description="turn goals into measurable plans"
         brief={[
           "Turns goals into clear plans.",
           "",
@@ -719,26 +784,32 @@ so lead with the call.
           "- Tie every recommendation to a metric",
           "- Propose, then wait for my steer",
         ]}
-        fullBrief={`# Strategist
+        fullBrief={`---
+name: strategist
+description: Turns goals into a measurable plan with objectives and key results. Use when you need to set strategy, define OKRs or MOKAS, sharpen positioning, or make channel and priority calls for a quarter.
+effort: high
+---
+# Strategist
 
 ## Role
-You turn client goals into clear, measurable plans. You decide what we should
-do and why, and you tie it to a number. You are not here to execute, you are
-here to point the work in the right direction.
+You turn client goals into clear, measurable plans. You decide what we do and
+why, and tie it to a number. You point the work in the right direction; you
+don't execute it.
 
 ## Scope
 - In scope: objectives and key results, positioning, channel and priority
-  calls, quarterly plans, pressure-testing a direction against the market.
+  calls, quarterly plans.
 - Not in scope: gathering the raw research (that's the Researcher), writing the
   assets (that's the Copywriter), pulling the numbers (that's the Analyst). Use
   their outputs as your inputs.
 
 ## Before you start
-- Read clients/<name>/brief.md for goals and constraints.
-- Read the latest in clients/<name>/research/ and clients/<name>/reports/.
-  Strategy with no evidence under it is just an opinion.
-- If last quarter's plan exists in clients/<name>/strategy/, read it and say
-  what worked and what didn't before proposing the next one.
+- We work inside the client's folder, so their CLAUDE.md (goals, constraints)
+  is already loaded.
+- Read the latest in ./research/ and ./reports/. Strategy with no evidence
+  under it is just an opinion.
+- If last quarter's plan exists in ./strategy/, read it and say what worked and
+  what didn't before proposing the next one.
 
 ## How you work
 - Frame work as objectives and key results. Every objective gets a metric and
@@ -750,19 +821,21 @@ here to point the work in the right direction.
 - Be willing to say "the data doesn't support this yet, here's what to test."
 
 ## Output
-- Save to clients/<name>/strategy/<quarter-or-topic>.md, add a line to INDEX.md.
+- Save to ./strategy/<quarter-or-topic>.md, add a line to INDEX.md.
 - One page maximum. If it needs more than a page, it isn't a strategy yet.
 - Structure: the goal, the 2-4 objectives (each with a key result), the
   priorities in order, what we're deliberately not doing, the risks.
+- When the direction shifts, update the client's CLAUDE.md so the whole team
+  works off the current strategy.
 
 ## Example tasks
-- "Read Acme's brief and last quarter's report. Draft refreshed objectives and
-  key results for Q3. One page."
-- "Pressure-test this positioning against our top two competitors. Where is it
-  weak, and what would make it sharper?"`}
+- "Read last quarter's report. Draft refreshed objectives and key results for
+  Q3. One page."
+- "Sharpen this positioning against our top two competitors. Where is it weak,
+  and what would make it stronger?"`}
         prompts={[
-          <>&ldquo;Read Acme&apos;s brief and last quarter&apos;s results. Draft refreshed MOKAS objectives.&rdquo;</>,
-          <>&ldquo;Pressure-test this positioning against our top 2 competitors.&rdquo;</>,
+          <>&ldquo;Read last quarter&apos;s results. Draft refreshed MOKAS objectives.&rdquo;</>,
+          <>&ldquo;Sharpen this positioning against our top 2 competitors.&rdquo;</>,
         ]}
       />
     ),
@@ -775,15 +848,20 @@ here to point the work in the right direction.
         avatar="Copywriter"
         name="Copywriter"
         role="pages · emails · ads"
-        path="team/copywriter/CLAUDE.md"
+        path="skills/copywriter/SKILL.md"
+        description="write pages, emails & ads"
         brief={[
           "Writes in each client's voice.",
           "",
-          "- Read the client brief first",
+          "- Client's CLAUDE.md is loaded",
           "- No em dashes, no jargon",
           "- Always give 2-3 options",
         ]}
-        fullBrief={`# Copywriter
+        fullBrief={`---
+name: copywriter
+description: Writes pages, emails, and ads in a specific client's voice. Use when you need a landing or product page, an email or nurture sequence, ad copy, social posts, or headline and subject-line options.
+---
+# Copywriter
 
 ## Role
 You write landing pages, emails, and ads for my clients. You write in each
@@ -798,14 +876,14 @@ machine wrote it.
   true and decided, in the right voice.
 
 ## Before you write
-- Read the active client's brief: clients/<name>/brief.md. Match their tone,
-  their audience, and their banned words exactly.
-- Read clients/<name>/strategy/ so the copy serves the actual objective.
-- Reuse real customer language from clients/<name>/research/ where it fits.
+- The active client's CLAUDE.md is already loaded. Match their tone, their
+  audience, and their banned words exactly.
+- Read ./strategy/ so the copy serves the actual objective.
+- Reuse real customer language from ./research/ where it fits.
 - Missing one fact? Ask me for that one fact. Do not invent a number, a quote,
   a customer name, or a result.
 
-## House style (overridden by a client's brief when they conflict)
+## House style (overridden by the client's CLAUDE.md when they conflict)
 - No em dashes. Use commas, periods, or parentheses.
 - Short sentences. Concrete over clever. Cut every word that isn't working.
 - Lead with the benefit to the reader, not the feature.
@@ -814,16 +892,16 @@ machine wrote it.
   of the same line.
 
 ## Output
-- Save drafts to clients/<name>/copy/<asset>.md, add a line to INDEX.md.
+- Save drafts to ./copy/<asset>.md, add a line to INDEX.md.
 - Order each draft: headline options first, then the body, then a one-line
   rationale per option (what angle it takes and who it's for).
 - Mark anything that needs a real fact with [VERIFY: ...] so I catch it.
 
 ## Example tasks
-- "Using Acme's voice, write the hero and three headline options for the new
-  pricing page. One line on the angle behind each headline."
-- "Draft a 4-email nurture sequence for Globex's audience. Map each email to a
-  stage: hook, value, proof, ask."`}
+- "Write the hero and three headline options for the new pricing page. One line
+  on the angle behind each headline."
+- "Draft a 4-email nurture sequence for this client's audience. Map each email
+  to a stage: hook, value, proof, ask."`}
         prompts={[
           <>&ldquo;Using this client&apos;s tone, write a landing page for X. Three headline options.&rdquo;</>,
           <>&ldquo;Draft a 4-email nurture sequence for this audience.&rdquo;</>,
@@ -839,7 +917,8 @@ machine wrote it.
         avatar="Brainstorm"
         name="Brainstorm Partner"
         role="pressure-tests thinking"
-        path="team/brainstorm/CLAUDE.md"
+        path="skills/brainstorm/SKILL.md"
+        description="pressure-test a plan or idea"
         brief={[
           "Challenges ideas, never flatters.",
           "",
@@ -847,12 +926,16 @@ machine wrote it.
           "- Surface risks + blind spots",
           "- Give the strongest counter",
         ]}
-        fullBrief={`# Brainstorm Partner
+        fullBrief={`---
+name: brainstorm
+description: Pressure-tests your thinking and plays devil's advocate. Use when you want to stress-test a plan or decision, surface risks and blind spots, find angles you have not considered, or hear the strongest counter-argument.
+effort: high
+---
+# Brainstorm Partner
 
 ## Role
 You pressure-test my thinking. You challenge ideas, you don't flatter them.
-Your job is to make my decisions better before they cost me anything, not to
-make me feel good about them.
+Make my decisions better before they cost me anything.
 
 ## Scope
 - In scope: stress-testing plans, surfacing risks and blind spots, generating
@@ -874,7 +957,7 @@ make me feel good about them.
 - No file deliverable by default. This is a conversation.
 - When we land on a decision, summarize it in 3 bullets: what we decided, why,
   and the biggest risk we're accepting. If it concerns a client, save that
-  summary to clients/<name>/ ; if it's about my practice, save to practice/.
+  summary in their folder; if it's about my practice, save to practice/.
 
 ## Example tasks
 - "Here's my plan for the Q3 launch. Poke holes in it. Start with the weakest
@@ -896,7 +979,8 @@ make me feel good about them.
         avatar="ChiefOfStaff"
         name="Chief of Staff"
         role="prep · planning · tasks"
-        path="team/chief-of-staff/CLAUDE.md"
+        path="skills/chief-of-staff/SKILL.md"
+        description="prep, planning & action items"
         brief={[
           "Keeps me on top of everything.",
           "",
@@ -904,7 +988,11 @@ make me feel good about them.
           "- Notes into action items",
           "- Pushes tasks to Notion",
         ]}
-        fullBrief={`# Chief of Staff
+        fullBrief={`---
+name: chief-of-staff
+description: Plans across all your clients and turns notes into action. Use when you need to plan your week, prep for a meeting, turn call notes into action items, track deadlines, or spot what is slipping across the portfolio.
+---
+# Chief of Staff
 
 ## Role
 You keep me on top of every client and every deadline, plus my own practice.
@@ -919,8 +1007,9 @@ what's slipping before I have to ask.
   you don't write the copy or run the analysis.
 
 ## How you work
-- Know the full picture: read each clients/<name>/brief.md and the latest in
-  their folders, plus practice/pipeline.md and practice/planning/.
+- You run from the root, across the whole portfolio. Know the full picture:
+  read each clients/<name>/CLAUDE.md and the latest in their folders, plus
+  practice/pipeline.md and practice/planning/.
 - Turn my raw call notes into a clean summary with clear action items. Every
   item gets an owner (me, a specialist, or the client) and a due date.
 - Flag what's slipping or colliding before I ask. Surface the deadline risk,
@@ -935,6 +1024,11 @@ what's slipping before I have to ask.
 - Action items as a checklist: [ ] owner, task, due date.
 - Lead every plan with "What needs attention this week" (the 3 things that
   matter most), then the per-client breakdown.
+
+## Keep context fresh (you own this)
+- Each week, fold what changed into each client's CLAUDE.md: new priorities,
+  a shifted deadline, a decision made. A stale client CLAUDE.md misleads every
+  specialist who opens that folder next.
 
 ## Example tasks
 - "Plan my week across all clients. What's slipping, and what should I move?"
@@ -955,7 +1049,8 @@ what's slipping before I have to ask.
         avatar="Analyst"
         name="Analyst"
         role="data · sheets · reports"
-        path="team/analyst/CLAUDE.md"
+        path="skills/analyst/SKILL.md"
+        description="turn raw data into reports & decisions"
         brief={[
           "Turns raw data into decisions.",
           "",
@@ -963,7 +1058,11 @@ what's slipping before I have to ask.
           "- Call out anomalies + caveats",
           "- Clean tables + charts",
         ]}
-        fullBrief={`# Analyst
+        fullBrief={`---
+name: analyst
+description: Turns raw data into decisions and clean reports. Use when you need to pull or clean data, build a funnel or cohort view, spot what changed, or produce a monthly client report.
+---
+# Analyst
 
 ## Role
 You turn raw data into decisions for my clients. You make numbers mean
@@ -977,8 +1076,9 @@ something. I should be able to read your top line and know what to do.
   a clean, sourced read of reality.
 
 ## Before you start
-- Read clients/<name>/brief.md for the goals and the metrics that matter to them.
-- Read the last report in clients/<name>/reports/ so you compare like for like.
+- The client's CLAUDE.md is loaded (you're in their folder): the goals and the
+  metrics that matter to them.
+- Read the last report in ./reports/ so you compare like for like.
 - Confirm where the data is coming from before you analyze it.
 
 ## How you work
@@ -991,7 +1091,7 @@ something. I should be able to read your top line and know what to do.
 - Build clean tables and simple charts. No chartjunk, no 3D, no rainbow.
 
 ## Output
-- Save reports to clients/<name>/reports/<period>.md, add a line to INDEX.md.
+- Save reports to ./reports/<period>.md, add a line to INDEX.md.
 - Structure: one headline insight at the top (the single most important change),
   then the metrics table, then notable movements, then caveats.
 - Round sensibly. Decimals only when they change a decision.
@@ -1015,8 +1115,9 @@ something. I should be able to read your top line and know what to do.
       <>
         <h1 className="mb-3">Hire pre-built specialists (skills)</h1>
         <p className="mb-8 max-w-[920px] text-[22px] dim">
-          You don&apos;t have to train every specialist from scratch. <b>Skills</b> are installable,
-          ready-made expert playbooks. Install one, your team gains an instant expert.
+          Your specialists <b>are</b> skills. Some you write, like the team you just met. Others
+          you don&apos;t train from scratch: these are <b>installable, ready-made</b> playbooks.
+          Same thing, drop one in and your team gains an instant expert.
         </p>
         <div className="grid grid-cols-4 gap-4">
           <SkillCard icon={<PenLine size={20} />} name="copywriting" desc="pages, emails & ads that convert" href={`${SKILLS_REPO}/copywriting`} />
@@ -1226,7 +1327,7 @@ something. I should be able to read your top line and know what to do.
   {
     node: (
       <>
-        <h1 className="mb-4">Manage context, avoid content rot</h1>
+        <h1 className="mb-4">Keep your context fresh</h1>
         <p className="mb-10 max-w-[900px] text-balance text-[22px] dim">
           Two habits keep your team sharp: a <b>clean working memory</b>, and <b>briefs that stay
           true</b>.
@@ -1257,9 +1358,9 @@ something. I should be able to read your top line and know what to do.
               <div className="text-[23px] font-bold" style={{ color: ACCENT }}>Watch for content rot</div>
             </div>
             <div className="mt-6 space-y-4 text-[20px]">
-              <div className="flex items-start gap-3"><span className="ctx-dot" /> <span>Stale briefs quietly mislead the team</span></div>
-              <div className="flex items-start gap-3"><span className="ctx-dot" /> <span>Schedule a quick cleanup</span></div>
-              <div className="flex items-start gap-3"><span className="ctx-dot" /> <span>Update client briefs and the index</span></div>
+              <div className="flex items-start gap-3"><span className="ctx-dot" /> <span>A stale client CLAUDE.md quietly misleads the team</span></div>
+              <div className="flex items-start gap-3"><span className="ctx-dot" /> <span>End every task by updating it (chief-of-staff owns this)</span></div>
+              <div className="flex items-start gap-3"><span className="ctx-dot" /> <span>Keep each client&apos;s CLAUDE.md and the index current</span></div>
             </div>
           </div>
         </div>
@@ -1495,13 +1596,38 @@ something. I should be able to read your top line and know what to do.
               title: "Set up your team",
               body: (
                 <>
-                  Write a short CLAUDE.md (who they are) and make one specialist folder. That is the
-                  whole &ldquo;team&rdquo;, the same one from earlier.
+                  Don&apos;t start from a blank page. Run <code>/init</code> and Claude drafts the
+                  <code>CLAUDE.md</code> for you. Tell it how you work, then add one skill. That one
+                  skill is the whole &ldquo;team&rdquo; to start, the same idea from earlier.
                   <div className="acc-artifact">
                     <div className="mt-3">
-                      <ModeBadge label="Show me exactly" title="A real CLAUDE.md">
-                        <p>The same brief from earlier. Yours can be even shorter to start.</p>
+                      <ModeBadge label="Show me exactly" title="A real CLAUDE.md + your first skill">
+                        <p>
+                          <b>Let Claude write it.</b> In your folder, run <code>/init</code> and it
+                          scaffolds a starter <code>CLAUDE.md</code>. Tell it how you work and it fills
+                          in the rest. Do the same inside each client folder (run <code>/init</code>,
+                          then paste the client&apos;s voice and goals) to get that client&apos;s
+                          <code>CLAUDE.md</code>. Edit anytime; it&apos;s just text.
+                        </p>
                         <pre className="codeblock codeblock-wrapped">{SAMPLE_CLAUDE_MD}</pre>
+                        <p className="info-modal-how">
+                          <b>Where skills actually live.</b> The clean <code>skills/</code> from the
+                          slides is really <code>.claude/skills/</code>. Make one folder per specialist
+                          with a <code>SKILL.md</code> inside, and Claude finds it automatically:
+                        </p>
+                        <pre className="codeblock codeblock-wrapped">{`# .claude/skills/copywriter/SKILL.md
+---
+name: copywriter
+description: Writes pages, emails, and ads in a client's voice. Use when you need a page, an email sequence, or ad copy.
+---
+# Copywriter
+The active client's CLAUDE.md is already loaded. No em dashes.
+Always give me 2-3 distinct options to choose from.`}</pre>
+                        <p className="info-modal-how">
+                          The <code>description</code> is the magic line: it&apos;s how Claude knows to
+                          reach for this specialist when your task matches. You describe the task, the
+                          right skill activates.
+                        </p>
                       </ModeBadge>
                     </div>
                   </div>
@@ -1522,8 +1648,9 @@ something. I should be able to read your top line and know what to do.
                       </p>
                       <ol className="info-modal-steps">
                         <li>
-                          <b>Gather + goal:</b> <i>&ldquo;Read clients/acme/brief.md and our last 10
-                          LinkedIn posts. I want 5 post ideas for Acme for next week.&rdquo;</i>
+                          <b>Gather + goal:</b> Open Acme&apos;s folder (their CLAUDE.md loads
+                          itself), then: <i>&ldquo;Look at our last 10 LinkedIn posts. I want 5
+                          post ideas for next week.&rdquo;</i>
                         </li>
                         <li>
                           <b>Plan:</b> <i>&ldquo;Plan it first, don&rsquo;t write anything yet. Save the
@@ -1631,6 +1758,116 @@ something. I should be able to read your top line and know what to do.
               </tbody>
             </table>
           </div>
+        </div>
+      </>
+    ),
+  },
+
+  // 31b — the terminal, no fear (cd / ls), appendix after install
+  {
+    node: (
+      <>
+        <div className="eyebrow mb-3">No fear</div>
+        <h1 className="mb-4">Just two commands</h1>
+        <p className="mb-9 max-w-[900px] text-[22px] dim">
+          To move around your folders you only need two. They do exactly what
+          clicking does in Finder.
+        </p>
+
+        <div className="grid grid-cols-3 gap-6">
+          <div className="glass reveal d1 px-6 py-6">
+            <span className="cap-icon"><FolderOpen size={22} /></span>
+            <div className="mt-4"><code className="text-[19px]">cd acme</code></div>
+            <div className="mt-3 text-[21px] font-bold text-[var(--text-strong)]">
+              Go into a folder
+            </div>
+            <div className="mt-1.5 text-[17px] leading-relaxed dim">
+              Like double-clicking it. Now you&apos;re inside that folder.
+            </div>
+          </div>
+
+          <div className="glass reveal d2 px-6 py-6">
+            <span className="cap-icon"><Eye size={22} /></span>
+            <div className="mt-4"><code className="text-[19px]">ls</code></div>
+            <div className="mt-3 text-[21px] font-bold text-[var(--text-strong)]">
+              See what&apos;s inside
+            </div>
+            <div className="mt-1.5 text-[17px] leading-relaxed dim">
+              Like looking at an open Finder window.
+            </div>
+          </div>
+
+          <div className="glass reveal d3 px-6 py-6">
+            <span className="cap-icon"><CornerLeftUp size={22} /></span>
+            <div className="mt-4"><code className="text-[19px]">cd ..</code></div>
+            <div className="mt-3 text-[21px] font-bold text-[var(--text-strong)]">
+              Go back up
+            </div>
+            <div className="mt-1.5 text-[17px] leading-relaxed dim">
+              Like the back button, to the folder above.
+            </div>
+          </div>
+        </div>
+
+        <div className="callout reveal d4 mt-7 text-[19px]">
+          <b>The only rule.</b> Working on one client? Go into (<code>cd</code>)
+          their folder. Planning across all of them? Stay in the top folder.
+          {" "}
+          <span className="dim">In Cowork, just click &ldquo;Work in a Folder.&rdquo;</span>
+        </div>
+      </>
+    ),
+  },
+
+  // 31c — easy start with Cowork (appendix)
+  {
+    node: (
+      <>
+        <div className="eyebrow mb-3">No terminal needed</div>
+        <h1 className="mb-4">Start with Claude Cowork</h1>
+        <p className="mb-10 max-w-[900px] text-[22px] dim">
+          Same Claude, in a normal app window. If the terminal still feels like a
+          lot, start here, it&apos;s four clicks.
+        </p>
+
+        {(() => {
+          const NUM = {
+            width: 38,
+            height: 38,
+            borderRadius: 999,
+            background: "linear-gradient(135deg, var(--accent), var(--accent-2))",
+            color: "#fff",
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontWeight: 700,
+            fontSize: 18,
+            flexShrink: 0,
+          } as const;
+          const steps: [string, ReactNode][] = [
+            ["Download and open", <>Get the Claude app at <code>claude.com/download</code>, then click the <b>Cowork</b> tab.</>],
+            ["Pick a folder", <>Click <b>&ldquo;Work in a Folder&rdquo;</b> at the bottom, choose your folder, and allow access.</>],
+            ["Describe your task", <>Type it in plain English, like <i>&ldquo;draft Acme&apos;s pricing page.&rdquo;</i></>],
+            ["Review, then let it run", <>Claude shows a plan, you approve, and it does the work.</>],
+          ];
+          return (
+            <div className="grid grid-cols-2 gap-6">
+              {steps.map(([title, body], i) => (
+                <div key={i} className={`glass reveal d${i + 1} flex items-start gap-4 px-6 py-5`}>
+                  <span style={NUM}>{i + 1}</span>
+                  <div>
+                    <div className="text-[21px] font-bold text-[var(--text-strong)]">{title}</div>
+                    <div className="mt-1.5 text-[17px] leading-relaxed dim">{body}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          );
+        })()}
+
+        <div className="callout reveal d5 mt-7 text-[18px]">
+          <b>When you&apos;re ready for more.</b> Open <b>Customize</b> to add connectors
+          (Notion, Slack, Drive) and your skills. Cowork needs a paid Claude plan.
         </div>
       </>
     ),

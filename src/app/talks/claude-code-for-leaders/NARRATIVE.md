@@ -9,19 +9,19 @@
 
 > How to read this doc: each slide has **On slide** (what the audience sees, keep it sparse) and **Speaker notes** (what you say). Timings are a guide, not a script.
 
-> **Core model (read first):** There is **one team** of specialists, not a team per client. Specialists live once. Clients are just **context** you keep in a `clients/` folder and point a specialist at when needed.
+> **Core model (read first):** There is **one team** of specialists, not a team per client. Each specialist is a **skill** (a folder with a `SKILL.md`) that lives once and self-activates when a task matches its `description`. Skills are found by walking up to the workspace root, so they follow you into every client folder. Each client is a folder with **its own `CLAUDE.md`** (voice, goals, current state). To work on a client you **open their folder**: their `CLAUDE.md` loads automatically and your skills come along. You work from the root only for portfolio-wide tasks.
 > ```
 > my-work/
 >   CLAUDE.md            <- how your team works (always loaded)
->   team/
->     researcher/        <- each specialist has its own short brief
+>   skills/              <- one SKILL.md per specialist (shown clean; really .claude/skills/)
+>     researcher/        <- each specialist self-activates on its description
 >     copywriter/
 >     strategist/
 >     chief-of-staff/
 >   clients/
->     acme/brief.md      <- one short brief per client
->     globex/brief.md
->   docs/                <- saved outputs + INDEX.md
+>     acme/CLAUDE.md     <- this client's context, auto-loads when you open the folder
+>     globex/CLAUDE.md
+>   INDEX.md             <- one map of every saved output
 > ```
 
 ---
@@ -151,25 +151,25 @@ Introduce the cast. Every one of these is the same underlying tool, pointed at a
   - How you work and what you value
   - Who your specialists are
   - Your standing rules (always plan first, always save outputs)
-- Write it once. Every specialist starts already briefed.
+- Each specialist is a **skill** (a `SKILL.md`); its `description` makes it self-activate. You describe the task, not the teammate.
 
 **Speaker notes:**
-The single most important practical idea. A plain text file called CLAUDE.md sits in your workspace, and Claude reads it automatically every time you start. Think of it as the operating manual for your whole team: how you like to work, who the specialists are, your house rules. This is team-level, not client-level. Keep it concise, it loads every session, so link to detail rather than pasting everything in. Client detail lives somewhere else, which is the next slide.
+The single most important practical idea. A plain text file called CLAUDE.md sits in your workspace, and Claude reads it automatically every time you start. Think of it as the operating manual for your whole team: how you like to work, who the specialists are, your house rules. This is team-level, not client-level. Then each specialist is a skill: a small folder with a SKILL.md brief. The magic is one line at the top, the `description` — that's how Claude knows to reach for the copywriter when you say "draft the landing page." You don't pick the specialist, you describe the task and the right one shows up. Keep CLAUDE.md concise, it loads every session, so link to detail rather than pasting everything in. Client detail lives somewhere else, which is the next slide.
 
 *(~1.5 min)*
 
 ---
 
-## Slide 9: Specialists are roles with their own brief
+## Slide 9: Specialists are skills that self-activate
 
 **On slide:**
-- Each specialist = a folder under `team/` with its own short `CLAUDE.md`.
-- That brief gives it identity, tone, and what to focus on.
-- Start a specialist by opening its folder.
-- Visual: the `team/` folder tree (researcher / copywriter / strategist / chief-of-staff).
+- Each specialist = a skill: a folder (shown as `skills/`, really `.claude/skills/`) with its own `SKILL.md`.
+- That brief gives it identity, tone, and what to focus on; the `description` line makes it discoverable.
+- You don't open a folder, you describe the task and the matching skill activates.
+- Visual: the `skills/` tree (researcher / copywriter / strategist / chief-of-staff).
 
 **Speaker notes:**
-Here's how the team exists on your machine. Under a "team" folder, each role has a short brief: who it is, its tone, the references it should lean on, where to save work. When you start Claude from the copywriter's folder, it's the copywriter. Switching specialists is just opening a different folder. Show the tree visually so non-technical folks see it's just nested folders, nothing exotic. Crucially: this is **one** team you build once, not a new team per client.
+Here's how the team exists on your machine. Each role is a skill: a small folder with a SKILL.md that says who it is, its tone, the references it should lean on, where to save work. The first line, the `description`, is what makes it work like a real teammate: when you say "draft Acme's pricing page," Claude sees the copywriter's description matches and reaches for it automatically. You don't switch specialists by opening folders, you just describe the work. Show the tree visually so non-technical folks see it's just nested folders, nothing exotic. Two things to land: this is **one** team you build once, not a new team per client, and it's the same primitive as the pre-built skills coming up in a few slides, some you write, some you install.
 
 *(~1.5 min)*
 
@@ -179,12 +179,12 @@ Here's how the team exists on your machine. Under a "team" folder, each role has
 
 **On slide:**
 - One team. Many clients.
-- Keep a `clients/` folder, one short brief per client.
-- Any specialist can read the relevant client's context when you point it there.
-- "Acme's copywriter" and "Globex's copywriter" are the same copywriter, handed a different brief.
+- Each client is a folder with its own `CLAUDE.md` (voice, goals, current state).
+- **Open the client you're working on** and their `CLAUDE.md` loads itself; your skills come with you. Work the root for the whole portfolio.
+- End every task by updating that client's `CLAUDE.md`, so it stays current.
 
 **Speaker notes:**
-This is the structural idea that keeps you sane across multiple engagements. You do not clone your whole team for every client. You keep one team, and each client is just a short context file in a clients folder: who they are, their positioning, their goals, links to their key docs. When you sit down to work on Acme, you tell the relevant specialist to read Acme's brief. The expertise is reusable, the context is swappable. As a bonus, at the end of an engagement that client folder is a tidy knowledge asset you can hand over.
+This is the structural idea that keeps you sane across multiple engagements. You do not clone your whole team for every client. You keep one team, and each client is just a folder with its own CLAUDE.md: who they are, their positioning, their goals, their current priorities. The trick: when you sit down to work on Acme, you open Acme's folder. That CLAUDE.md loads automatically, so every specialist already knows the client, and because skills are found by walking up to the root, your whole team is right there with you. No "remember to load the brief." For work that spans clients, like planning your week, you stay at the root and the chief-of-staff reads across all of them. The expertise is reusable, the context is swappable, and each client folder becomes a tidy knowledge asset you can hand over at the end. One more habit to plant here: the last step of any task is updating that client's CLAUDE.md, because it auto-loads next time, so the update is immediately live.
 
 *(~1.5 min)*
 
@@ -211,16 +211,16 @@ Slash commands are the dashboard controls. You only need a handful. /init writes
 ## Slide 12: Hire pre-built specialists (the skills marketplace)
 
 **On slide:**
-- You don't have to train every specialist from scratch.
+- Your specialists **are** skills. Some you write, some you install.
 - **Skills** = installable, ready-made expert playbooks.
 - Real marketing examples that already exist:
   - Copywriting, SEO audit, content strategy
   - Pricing strategy, cold email, customer research
   - Ad creative, landing page / conversion optimization
-- Install one, and your team gains an instant expert.
+- Drop one in, and your team gains an instant expert.
 
 **Speaker notes:**
-This slide tends to get the room excited, so give it room to breathe. Beyond the roles you write yourself, there's a marketplace of pre-built skills: structured playbooks an expert has already encoded. Need a competitor comparison page, a pricing analysis, a cold email sequence, a customer research synthesis? There's likely a skill for it. You install it and your team can run that play to a professional standard, even in an area you personally know less well. Native commands are the controls, skills are specialists you hire on demand. Note for accuracy: skills come from Anthropic and from community marketplaces, quality varies, so treat a new skill like a new contractor and check its first output.
+This slide tends to get the room excited, so give it room to breathe. The key line: the specialists you just wrote and these pre-built ones are the **same thing**, both skills. The difference is only who authored them. So beyond the roles you write yourself, there's a marketplace of pre-built skills: structured playbooks an expert has already encoded. Need a competitor comparison page, a pricing analysis, a cold email sequence, a customer research synthesis? There's likely a skill for it. You drop it in and your team can run that play to a professional standard, even in an area you personally know less well. Native commands are the controls, skills are specialists you hire on demand. Note for accuracy: skills come from Anthropic and from community marketplaces, quality varies, so treat a new skill like a new contractor and check its first output.
 
 *(~2 min)*
 
@@ -283,13 +283,14 @@ Your specialists don't live in a silo. Through connections (the technical name i
 ## Slide 16: Monday, the Strategist
 
 **On slide:**
-- 1. "Read Acme's brief and last quarter's results." (gather + goal)
+- 0. Open Acme's folder (their CLAUDE.md loads itself).
+- 1. "Look at last quarter's results." (gather + goal)
 - 2. "Draft a plan for refreshed MOKAS objectives and key results. Save the plan." (plan)
 - 3. `/clear` "Execute the plan into a clean strategy doc." (execute)
 - Output: a reviewable strategy draft, not a blank page.
 
 **Speaker notes:**
-Start the week with strategy, and use it to model the three-step flow live on the slide. Because the strategist reads the client's context first and states the goal, it doesn't start cold. It proposes a plan, you edit, then it executes. This is the flow applied to your highest-value work: it does the structure and the legwork, you bring the judgment that earns your fee. Tie explicitly to MOKAS since this audience lives in it.
+Start the week with strategy, and use it to model the three-step flow live on the slide. First open Acme's folder, so their CLAUDE.md is already loaded and the strategist isn't starting cold. State the goal, it proposes a plan, you edit, then it executes. This is the flow applied to your highest-value work: it does the structure and the legwork, you bring the judgment that earns your fee. Tie explicitly to MOKAS since this audience lives in it.
 
 *(~1.5 min)*
 
@@ -315,7 +316,7 @@ Research is the most universally painful task and the easiest win. Competitor te
 - "Using this client's tone of voice, write a landing page for X. Three headline options."
 - "Draft a 4-email nurture sequence for this audience."
 - "Give me 10 ad variations to test."
-- On-brand because it read the client's brief first.
+- On-brand because the client's CLAUDE.md was already loaded.
 
 **Speaker notes:**
 The copywriter reads the client's context and tone of voice, so output sounds like the client, not like generic AI. This is volume work where speed compounds: variations to test, first drafts to react to, the boring-but-necessary email flows. You stay the editor and the taste. Note honestly: the first draft is rarely the final, but starting from a solid draft beats starting from nothing every time.
@@ -366,11 +367,11 @@ Close Part 3 on the thing that matters most to a fractional leader: the delivera
   - `/clear` between unrelated tasks. `/compact` to compress mid-task.
   - Keep CLAUDE.md lean, link to detail instead of pasting it.
 - **Watch for content rot.**
-  - Stale briefs and old docs quietly mislead the team.
-  - Schedule a quick cleanup: update client briefs and the index.
+  - A stale client `CLAUDE.md` quietly misleads every specialist who opens that folder.
+  - End each task by updating it (the chief-of-staff owns this).
 
 **Speaker notes:**
-Two practices that separate people who love this tool from people who get frustrated. First, manage the context window. It has finite working memory, so clear it between unrelated jobs and compact it when a session gets long. Keep your briefs lean. Second, and this is the one people forget: content rot. Your briefs, client folders, and docs index are only useful if they're current. A stale "current priorities" line or an out-of-date positioning note will confidently steer your whole team wrong. Treat your context like a garden, a few minutes of weeding keeps the whole system trustworthy. Make updating the brief and index the last step of meaningful work.
+Two practices that separate people who love this tool from people who get frustrated. First, manage the context window. It has finite working memory, so clear it between unrelated jobs and compact it when a session gets long. Keep your CLAUDE.md files lean. Second, and this is the one people forget: content rot. Each client's CLAUDE.md auto-loads when you open their folder, which is exactly why a stale one is dangerous: an out-of-date "current priorities" line will confidently steer your whole team wrong, every session, until you fix it. Treat your context like a garden, a few minutes of weeding keeps the whole system trustworthy. Make updating that client's CLAUDE.md and the index the last step of meaningful work, and let the chief-of-staff sweep them weekly.
 
 *(~1.5 min)*
 
@@ -400,7 +401,7 @@ A genuinely underused feature. Run /insights and it analyzes your own usage over
 **On slide:** (this slide is a click-through accordion in the built deck)
 - Reframe up top: **"The terminal is just a text box. You type in plain English, not code."**
 - **1. Install it** - a 5-minute, one-time setup, or open Cowork (no install). Expands to the native install line; "Show me exactly" opens a zero-to-one walkthrough (open Terminal on Mac/Windows, paste, log in once).
-- **2. Set up your team** - a short CLAUDE.md + one specialist folder. "Show me exactly" shows a real CLAUDE.md.
+- **2. Set up your team** - a short CLAUDE.md + one skill (a `SKILL.md`). "Show me exactly" shows a real CLAUDE.md plus where skills actually live (`.claude/skills/`) and a minimal SKILL.md.
 - **3. Give one real task** - using Gather to Plan to Execute. "Show me exactly" shows a worked first prompt.
 - Footer: Don't build the whole system. Get one win. (Too much? Open Cowork first.)
 
@@ -416,7 +417,7 @@ Lower the activation energy, and lower the fear first. Most of this room has nev
 **On slide:**
 - **Verify the facts.** It's confident even when it's wrong. You're the editor.
 - **Context in, quality out.** A thin brief gives thin work.
-- **Keep context fresh.** Stale briefs mislead the team (content rot).
+- **Keep context fresh.** A stale client `CLAUDE.md` misleads the team (content rot).
 - **You're still accountable.** It's your team, your name on the deliverable.
 
 **Speaker notes:**
@@ -454,6 +455,33 @@ Return to the opening. The constraint was never your thinking, it was how much o
 - Needs a Claude subscription or API key. First run walks you through sign-in.
 - Start: `cd` into your workspace folder, then `claude`
 - No terminal yet? Try **Claude Cowork** on the desktop app first.
+
+---
+
+## Appendix A2: The terminal is just two commands
+
+**On slide:**
+- Three cards: `cd acme` (go into a folder), `ls` (see what's inside), `cd ..` (go back up).
+- Each mapped to what it is in Finder (double-click, look in the window, back button).
+- The only rule: work on one client, go into (`cd`) their folder; plan across all, stay in the top folder. In Cowork, click "Work in a Folder."
+
+**Speaker notes:**
+A confidence slide for anyone the terminal scares. The whole message: you already know how to do this, it's just clicking folders. Going into a folder is `cd`, looking at what's inside is `ls`, backing out is `cd ..`. That's the entire vocabulary you need. Keep it light and fast. If someone asks "where do I actually work?", this is your answer: one client, go into their folder; whole portfolio, stay at the top. Pull it up on demand if the room looks nervous about the terminal during the getting-started section.
+
+*(~1 min)*
+
+---
+
+## Appendix A3: Start with Claude Cowork
+
+**On slide:**
+- Four numbered steps: 1) Download the Claude app at claude.com/download, open the Cowork tab. 2) Click "Work in a Folder," pick your folder, allow access. 3) Describe the task in plain English. 4) Claude shows a plan, you approve, it runs.
+- Footnote: open Customize to add connectors (Notion, Slack, Drive) and skills. Needs a paid plan.
+
+**Speaker notes:**
+This is the escape hatch for anyone the terminal lost. Same Claude, normal app window, no install scripts. The flow mirrors what they just learned: instead of typing `cd` you click "Work in a Folder," then you describe the task exactly the same way. Two honest notes: Cowork needs a paid plan, and the deeper workspace setup (shared skills, a CLAUDE.md per client folder) is cleanest in Claude Code, so frame Cowork as the friendly on-ramp, not the final home. Pull this up if hands go up during getting-started.
+
+*(~1 min)*
 
 ---
 
@@ -499,5 +527,5 @@ Return to the opening. The constraint was never your thinking, it was how much o
 - *Now ~25 content slides, roughly 32 to 35 minutes. If you need a tight 30, trim Part 3 to your two strongest specialist examples (Strategist + Chief of Staff).*
 - *Structure is one team + a `clients/` folder (see the top of this doc). Slides 8, 9, 10 set it up; Part 3 examples all assume it.*
 - *Cowork is handled honestly on Slide 5 as the easy on-ramp, and referenced again on Slides 23 and Appendix A. If most of the room is very non-technical, you could even open the Q&A with "start with Cowork tonight."*
-- *No live demo in this version. If you want one later, the natural moment is Slide 16: run the Strategist through Gather to Plan to Execute on a real client brief.*
+- *No live demo in this version. If you want one later, the natural moment is Slide 16: open a real client's folder, then run the Strategist through Gather to Plan to Execute.*
 - *The MOKAS references (Slides 3, 7, 16) are deliberate, since Happyfact owns that framework.*

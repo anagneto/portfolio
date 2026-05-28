@@ -1,7 +1,9 @@
-# Acme — Client Brief
+# Acme — Client Context
 
-This is the single source of truth for Acme. Every specialist reads this before
-doing Acme work. Keep it current. A stale brief misleads the whole team.
+This file loads automatically whenever I work inside Acme's folder, so every
+specialist starts knowing this client. It is the single source of truth for
+Acme. Keep it current. End every task by folding in what changed. A stale
+context misleads the whole team.
 
 ## Snapshot
 - What they do: B2B scheduling software for home-services teams (plumbers,

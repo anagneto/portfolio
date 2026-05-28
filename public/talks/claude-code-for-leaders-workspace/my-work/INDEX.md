@@ -10,8 +10,8 @@ redoing what's already done.
 
 ## Setup
 - `CLAUDE.md` — team operating manual — 2026-05-22
-- `clients/acme/brief.md` — Acme source of truth — 2026-05-22
-- `clients/globex/brief.md` — Globex source of truth — 2026-05-22
+- `clients/acme/CLAUDE.md` — Acme context (loads in their folder) — 2026-05-22
+- `clients/globex/CLAUDE.md` — Globex context (loads in their folder) — 2026-05-22
 - `practice/positioning.md` — how I sell myself — 2026-05-22
 - `practice/pipeline.md` — my prospects and proposals — 2026-05-22
 
