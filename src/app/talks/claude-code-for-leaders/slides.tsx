@@ -676,18 +676,14 @@ export const slides: Slide[] = [
       <>
         <h1 className="mb-14">One team. Many clients.</h1>
         <div className="grid grid-cols-2 items-center gap-12">
-          <div className="text-[22px]">
+          <div className="text-[23px]">
             <Bullets
               items={[
-                <>Your specialists live <b>once</b> as skills, and follow you into <b>every</b> client folder</>,
-                <><b>Open the client you&apos;re working on.</b> Their <code>CLAUDE.md</code> loads itself, so Claude already knows that client</>,
-                <>Each client&apos;s work stays in their folder (research, copy, reports). End every task by updating their <code>CLAUDE.md</code></>,
+                <>One team, shared across <b>every</b> client. Your specialists come with you into each client&apos;s folder.</>,
+                <>Open a client and Claude <b>already knows them</b>: their voice, goals, and history are right there.</>,
+                <>Everything for a client stays in their folder. Update it as things change, so it never goes stale.</>,
               ]}
             />
-            <div className="callout mt-9 text-[18px] italic leading-relaxed">
-              Work the root for the whole portfolio. Open a client&apos;s folder to go
-              deep on just them, with no other client in the room.
-            </div>
           </div>
           <FileTree root={WORKSPACE_TREE} />
         </div>
