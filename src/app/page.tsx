@@ -354,19 +354,19 @@ function Hero() {
       <div className="w-full max-w-6xl mx-auto px-6 py-32 relative z-10">
         <div className="animate-fade-in opacity-0">
           <p className="font-mono text-sm text-[#fb7185] mb-6 tracking-wide">
-            FULL-STACK JAVASCRIPT DEVELOPER
+            PRODUCT ENGINEER
           </p>
         </div>
 
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95] mb-8 animate-fade-in opacity-0 animate-delay-1">
-          I build apps from
+          I design, build, and ship
           <br />
-          <span className="gradient-text">idea to deployment.</span>
+          <span className="gradient-text">complete products.</span>
         </h1>
 
         <p className="text-xl md:text-2xl text-[#a0a0b0] max-w-2xl mb-12 leading-relaxed animate-fade-in opacity-0 animate-delay-2">
-          8+ years crafting web and mobile experiences.<br />
-          From AI platforms to real-time systems serving thousands.
+          Web, mobile, and AI.<br />
+          From the first idea to live in production.
         </p>
 
         <div className="flex flex-wrap gap-4 animate-fade-in opacity-0 animate-delay-3">

@@ -3,13 +3,13 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.ananeto.eu"),
-  title: "Ana Neto | Full-Stack JavaScript Developer",
+  title: "Ana Neto — Product Engineer",
   description:
-    "8+ years building web and mobile apps. React, React Native, Next.js specialist. From AI-powered platforms to real-time systems.",
+    "I design, build, and ship complete products. Web, mobile, and AI, from the first idea to live in production.",
   openGraph: {
-    title: "Ana Neto — Full-Stack JavaScript Developer",
+    title: "Ana Neto — Product Engineer",
     description:
-      "8+ years building web and mobile apps. I take projects from idea to deployment.",
+      "I design, build, and ship complete products. Web, mobile, and AI, from the first idea to live in production.",
     siteName: "Ana Neto",
     type: "website",
   },
