@@ -92,7 +92,7 @@ Professional portfolio website showcasing Ana as a **freelance full-stack JavaSc
 
 ### Commands
 ```bash
-npm run dev      # Start dev server at localhost:3000
+npm run dev -- -p 3002  # Start dev server (localhost:3002)
 npm run build    # Production build
 npm run start    # Start production server
 ```
@@ -121,3 +121,22 @@ Or connect the repo to Vercel dashboard for automatic deployments.
 - **Email**: ana.neto.agn@gmail.com
 - **LinkedIn**: linkedin.com/in/ananeto
 - **GitHub**: (add if public)
+
+## Session Handoffs
+- Keep handoffs LEAN: produce only the requested output (e.g., first message of next session) without re-reading context files or pre-emptively editing memory/plan docs unless explicitly asked.
+- Do not over-read context at session start; only load files directly relevant to the immediate task.
+
+## Shipping Code
+- Always use the existing `shipit` skill/command to commit and push — do not run manual git commit sequences.
+- Run typecheck before any ship/commit step.
+- When committing, scope the commit to ONLY the work discussed; never bundle unrelated uncommitted changes (e.g., don't mix SEO commits with CRO changes).
+
+## Testing Preference
+- Default to manual testing — produce a numbered test checklist for the user to run.
+- Playwright/browser automation is acceptable for dedicated E2E test suites or when the user explicitly asks for it. Do NOT reach for it as the default for verifying flows.
+
+## UI/Layout Conventions
+- Default `min-h-screen` for main containers globally rather than passing per-page props.
+- For vertical centering, restructure flex/grid layout — do NOT patch with margin-top hacks.
+- Use neutral outline button variants by default; reserve destructive (red) variants only when explicitly destructive.
+- Always prefix mock-data toasts/UI with [MOCK].
