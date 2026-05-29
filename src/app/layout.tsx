@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.ananeto.eu"),
   title: "Ana Neto | Full-Stack JavaScript Developer",
   description:
     "8+ years building web and mobile apps. React, React Native, Next.js specialist. From AI-powered platforms to real-time systems.",
