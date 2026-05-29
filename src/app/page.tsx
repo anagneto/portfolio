@@ -672,26 +672,26 @@ function About() {
           <div>
             <p className="font-mono text-sm text-[#fb7185] mb-4">ABOUT</p>
             <h2 className="text-4xl font-bold mb-8">
-              Developer with a
+              I build products,
               <br />
-              product mindset
+              not just features
             </h2>
             <div className="space-y-6 text-[#a0a0b0] leading-relaxed">
               <p>
-                I&apos;ve spent 8+ years building software, from founding my own agency
-                to shipping products used by hundreds of thousands of people. I
-                specialize in JavaScript across the stack: React for the frontend,
-                Node.js for the backend, and everything in between.
+                Eight years shipping software, from founding my own agency to
+                building products used by hundreds of thousands of people. I work
+                across the whole stack: React and React Native on the front, Node
+                and Supabase on the back, AI woven in where it earns its place.
               </p>
               <p>
-                What sets me apart is I think like a founder. I don&apos;t just write
-                code, I understand product strategy, user needs, and business
-                constraints. I can take a project from initial concept through
-                architecture, development, and deployment.
+                I think like a founder because I am one. That means weighing
+                product strategy, user needs, and business constraints alongside
+                the code, and carrying a product from first sketch through
+                architecture, build, and launch.
               </p>
               <p>
-                Based in Porto, Portugal. Available for freelance projects and
-                consulting work.
+                Based in Porto, Portugal. Available for freelance and consulting
+                work.
               </p>
             </div>
 
@@ -756,8 +756,9 @@ function Contact() {
             Let&apos;s work together
           </h2>
           <p className="text-xl text-[#a0a0b0] mb-12">
-            Looking for a developer who can own your project end-to-end? I&apos;m
-            available for freelance work, consulting, and contracting.
+            Need someone to take a product from idea to production, and own every
+            layer in between? I&apos;m available for freelance, consulting, and
+            contracting.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
