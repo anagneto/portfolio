@@ -1231,6 +1231,179 @@
   box-shadow: 0 16px 40px var(--accent-glow);
 }
 
+/* Inline text link (e.g. contact email on the closing slide). */
+.deck-root .deck-link {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.deck-root .deck-link:hover { color: var(--accent-2); text-decoration: underline; }
+
+/* Row that holds the download CTA + the setup-instructions button. */
+.deck-root .deck-cta-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 36px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.deck-root .deck-cta-row .deck-dl-btn { margin-top: 0; }
+
+/* Secondary (outline) button next to the download CTA. */
+.deck-root .deck-instr-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+  background: #fff;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.deck-root .deck-instr-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+/* ----- Setup-instructions modal body (reuses .code-modal shell) ----- */
+.deck-root .instr-modal { width: min(880px, 92vw); }
+.deck-root .instr-body {
+  margin: 0;
+  padding: 26px 30px 30px;
+  overflow: auto;
+  font-family: var(--font-sans, inherit);
+  color: var(--text-secondary);
+  text-align: left;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.deck-root .instr-lead { margin: 0 0 8px; font-size: 16px; }
+.deck-root .instr-lead b { color: var(--text-strong); }
+.deck-root .instr-os {
+  margin: 26px 0 14px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 8px;
+}
+/* macOS / Windows segmented tabs. */
+.deck-root .instr-tabs {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  margin: 4px 0 18px;
+  border-radius: 999px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+}
+.deck-root .instr-tab {
+  appearance: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 7px 20px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  transition: color 0.2s ease, background 0.2s ease;
+}
+.deck-root .instr-tab:hover { color: var(--text-secondary); }
+.deck-root .instr-tab.active {
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+}
+
+.deck-root .instr-steps { list-style: none; margin: 0; padding: 0; }
+.deck-root .instr-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 12px 0;
+}
+.deck-root .instr-step + .instr-step { border-top: 1px solid var(--border-subtle); }
+.deck-root .instr-num {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.deck-root .instr-step-body { flex: 1; min-width: 0; }
+.deck-root .instr-step-title {
+  font-weight: 700;
+  color: var(--text-strong);
+  font-size: 17px;
+  margin-bottom: 6px;
+}
+.deck-root .instr-note { margin: 8px 0 0; font-size: 15px; color: var(--text-muted); }
+.deck-root .instr-foot {
+  margin: 22px 0 0;
+  font-size: 15px;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 16px;
+}
+.deck-root .instr-code {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 8px 8px 8px 12px;
+  margin-top: 8px;
+}
+.deck-root .instr-code-text {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text-strong);
+  overflow-x: auto;
+  white-space: pre;
+}
+.deck-root .instr-copy {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  color: var(--text-muted);
+  background: #fff;
+  border: 1px solid var(--border-subtle);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.deck-root .instr-copy:hover { color: var(--accent); border-color: var(--accent); }
+.deck-root .instr-inline {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  color: var(--accent);
+  background: var(--bg-secondary);
+  border-radius: 5px;
+  padding: 1px 6px;
+  white-space: nowrap;
+}
+
 /* ----------------------------------------------------------------------------
    Print: every slide becomes a landscape page.
 ---------------------------------------------------------------------------- */

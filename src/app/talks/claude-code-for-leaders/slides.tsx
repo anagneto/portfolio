@@ -28,6 +28,7 @@ import {
   Download,
 } from "lucide-react";
 import { ExpandableCode } from "./CodeModal";
+import { InstructionsModal } from "./InstructionsModal";
 import { ModeBadge } from "./ModeBadge";
 import { Accordion } from "./Accordion";
 import { FileTree, type FsNode } from "./FileTree";
@@ -1275,6 +1276,57 @@ something. I should be able to read your top line and know what to do.
     ),
   },
 
+  // 23 — choose the right mode
+  {
+    node: (
+      <>
+        <h1 className="mb-3">Choose the right mode</h1>
+        <p className="mb-8 max-w-[920px] text-[22px] dim">
+          Same Claude, different leash. How much do you want it to do before
+          checking with you?
+        </p>
+
+        <div className="grid grid-cols-3 gap-6">
+          <div className="glass reveal d1 px-7 py-6">
+            <span className="cap-icon"><ListChecks size={22} /></span>
+            <div className="mt-4 text-[22px] font-bold text-[var(--text-strong)]">Plan</div>
+            <div className="mt-2 text-[17px] leading-relaxed dim">
+              Thinks the whole task through and writes a plan, <b>without touching
+              any files</b>. You read it and approve first.
+            </div>
+            <div className="mt-3 text-[15px] muted">Best for anything bigger than a one-liner.</div>
+          </div>
+
+          <div className="glass reveal d2 px-7 py-6">
+            <span className="cap-icon"><PenLine size={22} /></span>
+            <div className="mt-4 text-[22px] font-bold text-[var(--text-strong)]">Edit</div>
+            <div className="mt-2 text-[17px] leading-relaxed dim">
+              <b>Accepts edits</b> for you so Claude keeps moving, no approving every
+              single step.
+            </div>
+            <div className="mt-3 text-[15px] muted">Your default once the plan looks right.</div>
+          </div>
+
+          <div className="glass reveal d3 px-7 py-6">
+            <span className="cap-icon"><Rocket size={22} /></span>
+            <div className="mt-4 text-[22px] font-bold text-[var(--text-strong)]">Auto</div>
+            <div className="mt-2 text-[17px] leading-relaxed dim">
+              Edits files <b>and runs commands</b> on its own, start to finish.
+            </div>
+            <div className="mt-3 text-[15px] muted">Use when you fully trust the task.</div>
+          </div>
+        </div>
+
+        <div className="callout mt-7 text-[19px]">
+          <b>How.</b> Press <code>Shift + Tab</code> to cycle: normal &rarr; plan &rarr;
+          accept edits &rarr; auto.
+          <br />
+          You stay in control, hit <code>Esc</code> any time to stop and steer.
+        </div>
+      </>
+    ),
+  },
+
   // shared memory
   {
     node: (
@@ -1542,7 +1594,7 @@ something. I should be able to read your top line and know what to do.
                   A 5-minute, one-time setup. Or skip it entirely and open Cowork, no install needed.
                   <div className="acc-artifact">
                     <div>
-                      Mac / Linux:{" "}
+                      Mac:{" "}
                       <code>curl -fsSL https://claude.ai/install.sh | bash</code>
                     </div>
                     <div className="mt-2">
@@ -1561,21 +1613,25 @@ something. I should be able to read your top line and know what to do.
                             <i>PowerShell</i>, hit Enter.
                           </li>
                           <li>
-                            <b>Breathe.</b> This window only runs lines you paste into it. Reading these
-                            cannot break your computer.
+                            <b>Make a folder to work in.</b> Mac:{" "}
+                            <code>mkdir ~/Desktop/claude-demo</code> then{" "}
+                            <code>cd ~/Desktop/claude-demo</code>. Windows:{" "}
+                            <code>mkdir $HOME\Desktop\claude-demo</code> then{" "}
+                            <code>cd $HOME\Desktop\claude-demo</code>. (Or make it in Finder and open it.)
                           </li>
                           <li>
-                            <b>Paste the install line</b> and press Enter, then wait a minute. Mac/Linux:{" "}
+                            <b>Install Claude Code.</b> Mac:{" "}
                             <code>curl -fsSL https://claude.ai/install.sh | bash</code>. Windows:{" "}
-                            <code>irm https://claude.ai/install.ps1 | iex</code>.
+                            <code>irm https://claude.ai/install.ps1 | iex</code>. Check it worked with{" "}
+                            <code>claude --version</code>.
                           </li>
                           <li>
                             <b>Start it.</b> Type <code>claude</code> and press Enter. The first time, it
                             opens your browser to log in once.
                           </li>
                           <li>
-                            <b>You did it</b> when Claude greets you and you can type a request in plain
-                            English.
+                            <b>Your first prompt.</b> Type <code>/init</code> and Claude reads your folder
+                            and writes a <code>CLAUDE.md</code>. You&apos;re up and running.
                           </li>
                         </ol>
                         <p className="info-modal-how">
@@ -1725,14 +1781,11 @@ Always give me 2-3 distinct options to choose from.`}</pre>
         <div className="grid grid-cols-2 gap-10">
           <div>
             <div className="mb-4 text-[20px] font-bold text-[var(--text-strong)]">Install</div>
-            <pre className="codeblock text-[16px]">
-              <span className="c"># Mac / Linux</span>{"\n"}
-              curl -fsSL https://claude.ai/install.sh | bash{"\n"}
-              <span className="c"># Windows (PowerShell)</span>{"\n"}
-              irm https://claude.ai/install.ps1 | iex{"\n"}
-              cd ~/my-work &amp;&amp; claude
-            </pre>
-            <p className="mt-4 text-[16px] dim">No terminal yet? Try Claude Cowork on the desktop app.</p>
+            <p className="mb-5 text-[18px] dim">
+              The full step-by-step, Mac and Windows, in one place.
+            </p>
+            <InstructionsModal />
+            <p className="mt-5 text-[16px] dim">No terminal yet? Try Claude Cowork on the desktop app.</p>
           </div>
           <div>
             <div className="mb-4 text-[20px] font-bold text-[var(--text-strong)]">Commands</div>
@@ -1742,7 +1795,7 @@ Always give me 2-3 distinct options to choose from.`}</pre>
                   ["/init", "Create CLAUDE.md"],
                   ["/clear", "Start fresh"],
                   ["/compact", "Compress memory"],
-                  ["/model", "Switch model"],
+                  ["Shift + Tab", "Switch modes"],
                   ["/mcp", "Tool connections"],
                   ["/insights", "Workflow review"],
                 ].map(([c, d]) => (
@@ -1820,8 +1873,8 @@ Always give me 2-3 distinct options to choose from.`}</pre>
     node: (
       <>
         <div className="eyebrow mb-3">No terminal needed</div>
-        <h1 className="mb-4">Start with Claude Cowork</h1>
-        <p className="mb-10 max-w-[900px] text-[22px] dim">
+        <h1 className="mb-3">Start with Claude Cowork</h1>
+        <p className="mb-6 max-w-[900px] text-[22px] dim">
           Same Claude, in a normal app window. If the terminal still feels like a
           lot, start here, it&apos;s four clicks.
         </p>
@@ -1847,9 +1900,9 @@ Always give me 2-3 distinct options to choose from.`}</pre>
             ["Review, then let it run", <>Claude shows a plan, you approve, and it does the work.</>],
           ];
           return (
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-4">
               {steps.map(([title, body], i) => (
-                <div key={i} className={`glass reveal d${i + 1} flex items-start gap-4 px-6 py-5`}>
+                <div key={i} className={`glass reveal d${i + 1} flex items-start gap-4 px-6 py-4`}>
                   <span style={NUM}>{i + 1}</span>
                   <div>
                     <div className="text-[21px] font-bold text-[var(--text-strong)]">{title}</div>
@@ -1861,7 +1914,7 @@ Always give me 2-3 distinct options to choose from.`}</pre>
           );
         })()}
 
-        <div className="callout reveal d5 mt-7 text-[18px]">
+        <div className="callout reveal d5 mt-5 text-[18px]">
           <b>When you&apos;re ready for more.</b> Open <b>Customize</b> to add connectors
           (Notion, Slack, Drive) and your skills. Cowork needs a paid Claude plan.
         </div>
@@ -1876,14 +1929,20 @@ Always give me 2-3 distinct options to choose from.`}</pre>
       <>
         <h1 className="gradient-text">Thank you</h1>
         <p className="mt-8 text-[24px] dim">Questions, disagreement, honest takes welcome.</p>
-        <a
-          href="/talks/claude-code-for-leaders-workspace.zip"
-          download
-          className="deck-dl-btn"
-        >
-          <Download size={18} /> Grab the starter workspace
-        </a>
-        <p className="mt-8 text-[18px] muted">Ana Neto</p>
+        <div className="deck-cta-row">
+          <a
+            href="/talks/claude-code-for-leaders-workspace.zip"
+            download
+            className="deck-dl-btn"
+          >
+            <Download size={18} /> Grab the starter workspace
+          </a>
+          <InstructionsModal />
+        </div>
+        <p className="mt-8 text-[18px] muted">
+          Ana Neto ·{" "}
+          <a href="mailto:hello@ananeto.eu" className="deck-link">hello@ananeto.eu</a>
+        </p>
       </>
     ),
   },
